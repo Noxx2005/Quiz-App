@@ -33,7 +33,7 @@ namespace Quiz.Controllers
                 Topic = request.Topic,
                 SubjectLower = request.Subject.ToLower(),
                 TopicLower = request.Topic.ToLower(),
-                QuestionAmount=request.QuizAmount,
+                QuestionAmount =request.QuizAmount,
                 CreatedAt = DateTime.UtcNow,
                 IsActive = request.IsActive
             };
