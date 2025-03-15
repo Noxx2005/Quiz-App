@@ -1,8 +1,8 @@
 {
   "version": 2,
-  "dgSpecHash": "lAX/vysAGQw=",
+  "dgSpecHash": "W+/puWUgp5A=",
   "success": true,
-  "projectFilePath": "C:\\Users\\Bot Peter\\source\\repos\\EFcore8 - Quiz\\Quiz.csproj",
+  "projectFilePath": "C:\\Users\\Bot Peter\\Documents\\Quiz-App\\EFcore8 - Quiz\\Quiz.csproj",
   "expectedPackageFiles": [
     "C:\\Users\\Bot Peter\\.nuget\\packages\\azure.core\\1.38.0\\azure.core.1.38.0.nupkg.sha512",
     "C:\\Users\\Bot Peter\\.nuget\\packages\\azure.identity\\1.11.4\\azure.identity.1.11.4.nupkg.sha512",
