@@ -7,7 +7,6 @@ import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faChevronLeft, faChevronRight } from "@fortawesome/free-solid-svg-icons";
 import Navbar from "../../Components/Navbar";
 import { jwtDecode } from "jwt-decode";
-
 const Home = () => {
   const [quizzes, setQuizzes] = useState([]);
   const [searchQuery, setSearchQuery] = useState("");
