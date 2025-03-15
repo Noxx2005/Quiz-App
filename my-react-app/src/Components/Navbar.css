@@ -1,0 +1,85 @@
+.Custom-Navbar {
+  position: relative;
+  top: 0;
+  left: 0;
+  width: 100%;
+  display: flex;
+  align-items: center;
+  justify-content: space-between; /* Ensures space between elements */
+  /* padding: 10px 30px; */
+  background-color: white;
+  height: 83px;  
+  box-shadow: 0px 2px 10px rgba(0, 0, 0, 0.1);
+}
+
+.Custom-Navbar-container {
+  display: flex;
+  width: 90%;
+  align-items: center;
+  justify-content: space-between;
+}
+
+.Custom-Navbar-brand {
+  display: flex;
+  align-items: center;
+  gap: 15px; /* Space between logo and text */
+}
+.logo {
+  height: 40px;
+}
+
+h2 {
+  font-size: 22px;
+  font-weight: bold;
+  color: black;
+  margin: 0;
+}
+
+.highlight {
+  color: green;
+}
+
+.Custom-Navbar-info {
+  display: flex;
+  align-items: center;
+}
+  
+  .user-info {
+    font-size: 1.2rem;
+    display: flex;
+    margin-right: 9px;
+    color: black;
+    gap: 10px;
+  }
+  
+  .xp {
+    font-weight: bold;
+    color: green;
+  }
+  
+  .login-button {
+    background-color: green;
+    color: white;
+    border: none;
+    /* padding: 8px 15px; */
+    border-radius: 5px;
+    cursor: pointer;
+  }
+  
+  .login-button:hover {
+    background-color: darkgreen;
+  }
+  .login-button:disabled {
+    background-color: gray;
+    cursor: not-allowed;
+  }
+
+  @media screen and (max-width: 768px) {
+    .Custom-Navbar {
+      padding: 28px 25px;
+    }
+  
+    .logo {
+      display: none;  /* Hides logo */
+    }
+  }

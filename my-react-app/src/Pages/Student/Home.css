@@ -1,0 +1,109 @@
+.home-container {
+  width: 100%;  /* Full viewport width */
+  /* height: 100vh; */
+  display: flex;
+  flex-direction: column;
+}
+
+  
+  /* Top section */
+  .top-section {
+    /* height: 30%; */
+    /* margin-top: 99px; */
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    background:White;
+    color: black;
+    font-size: 2.0rem;
+    font-weight: bold;
+  }
+  
+  .top-section span {
+    color: green;
+  }
+  
+  /* Bottom section */
+  .bottom-section {
+    height: 60%;
+    background: white;
+    padding: 20px;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+  }
+  
+  /* Quiz List Container */
+  .quiz-list {
+    display: flex;
+    align-items: center;
+    /* width: 80%; */
+    overflow: hidden;
+    /* position: relative;   */
+  }
+
+  .scroll-btn:focus,
+.scroll-btn:active {
+  outline: none;  /* Prevents focus outline */
+  border: none;   /* Ensures no border appears */
+  box-shadow: none; /* Removes any shadow effect */
+}
+  
+  /* Scroll Buttons */
+  /* .scroll-btn {
+    background: transparent;
+    border: none;
+    font-size: 24px;
+    cursor: pointer;
+    padding: 10px;
+    position: absolute;
+    top: 50%;
+    transform: translateY(-50%);
+    font-size: 240px;
+    color: #af4c4c;
+  }
+   */
+
+   .scroll-btn {
+    position: absolute;
+    /* top: 50%; */
+    transform: translateY(-50%);
+    background: none;
+    border: none;
+    cursor: pointer;
+    color: black;
+    font-size: 24px;
+    z-index: 10;
+  }
+  
+  .scroll-btn.left {
+    left: 10px;
+    width: 15%;
+  }
+  
+  .scroll-btn.right {
+    right: 10px;
+    width: 15%;
+  }
+  
+  .scroll-btn img {
+    width: 30px; /* Adjust size */
+    height: auto;
+  }
+  
+    /* .left {
+      left: 0;
+    }
+    
+    .right {
+      right: 0;
+    } */
+  
+  /* Cards Wrapper */
+  .quiz-cards {
+    display: flex;
+    gap: 20px;
+    overflow-x: hidden;
+    transition: transform 0.3s ease-in-out;
+  }
+  
