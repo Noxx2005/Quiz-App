@@ -1,0 +1,54 @@
+/* Sidebar container */
+.sidebar {
+    width: 250px;
+    height: 100vh;
+    background-color: #2c3e50;
+    color: white;
+    padding: 20px;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    position: fixed;
+  }
+  
+  /* Profile section */
+  .profile {
+    text-align: center;
+    margin-bottom: 20px;
+  }
+  
+  .profile-icon1 {
+    font-size: 60px;
+    color: white;
+  }
+  
+  h3 {
+    margin-top: 20px;
+    font-size: 18px;
+  }
+  
+  /* Menu list */
+  .menu {
+    list-style: none;
+    padding: 0;
+    width: 100%;
+  }
+  
+  .menu li {
+    /* width: 100%; */
+    padding: 32px;
+    text-align: center;
+  }
+  
+  .menu li a {
+    color: white;
+    text-decoration: none;
+    font-size: 16px;
+    display: block;
+    transition: 0.3s;
+  }
+  
+  .menu li:hover {
+    background-color: #5b7188;
+  }
+  
