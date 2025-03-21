@@ -8,8 +8,8 @@ const Quiz = () => {
   const navigate = useNavigate();
 
   const { quizId, time } = location.state || { quizId: null, time: 5 };
-  const API_URL = `http://localhost:5084/api/Quiz/GetQuizQuestions/${quizId}`;
-  const SUBMIT_API_URL = "http://localhost:5084/api/Student/submit-quiz";
+  const API_URL = `http://localhost:5000/api/Quiz/GetQuizQuestions/${quizId}`;
+  const SUBMIT_API_URL = "http://localhost:5000/api/Student/submit-quiz";
 
   const getStudentIdFromToken = () => {
     const token = sessionStorage.getItem("token");

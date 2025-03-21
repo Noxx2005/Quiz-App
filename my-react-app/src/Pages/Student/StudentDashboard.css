@@ -1,0 +1,185 @@
+/* General styling */
+.dashboard-container {
+  padding: 20px;
+  background-color: white;
+  font-family: Arial, sans-serif;
+  color: black;
+}
+
+/* Profile Section */
+.profile-section {
+  border: 1px solid black;
+  padding: 10px;
+  margin-bottom: 10px;
+}
+
+/* Layout: Subjects & Quiz History */
+.dashboard-content {
+  display: flex;
+  gap: 10px;
+}
+
+/* Subjects & Quiz History Containers */
+.subjects-section,
+.history-section {
+  flex: 1;
+  border: 1px solid black;
+  padding: 10px;
+}
+html, body {
+  max-height: 100vh;
+  margin: 0;
+  padding: 0;
+  background-color: white; /* Ensure background is consistent */
+}
+
+/* Red X Close Button */
+.close-button {
+  position: absolute;
+  top: 20px;
+  right: 20px;
+  background-color: green;
+  color: white;
+  /* font-size: 18px; */
+  /* border: none; */
+  /* width: 35px; */
+  /* height: 35px; */
+  border-radius: 50%;
+  cursor: pointer;
+  transition: background 0.3s ease-in-out;
+}
+
+.close-button:hover {
+  background-color: black;
+}
+
+
+
+/* Subjects List */
+.subjects-list {
+  list-style: none;
+  padding: 0;
+}
+
+.subject-item {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  background: white;
+  padding: 10px;
+  margin-bottom: 5px;
+  border: 1px solid black;
+}
+
+/* Buttons */
+.remove-button,
+.add-button {
+  background: black;
+  color: white;
+  padding: 10px 15px;
+  border: none;
+  cursor: pointer;
+  margin-bottom: 10px;
+}
+
+.add-button:hover,
+.remove-button:hover {
+  background-color: #0056b3;
+}
+
+/* Popup Styling */
+.popup {
+  position: fixed;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  background: white;
+  padding: 20px;
+  border: 1px solid black;
+  box-shadow: 0px 0px 10px gray;
+}
+
+.popup-content {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+
+.popup input {
+  margin: 10px 0;
+  padding: 5px;
+}
+
+.popup button {
+  margin: 5px;
+  padding: 8px 12px;
+  cursor: pointer;
+}
+
+/* Responsive Styling */
+
+/* Tablets (iPad Air, iPad Mini) */
+@media screen and (max-width: 1024px) {
+  .dashboard-content {
+      flex-direction: column;
+  }
+
+  .subjects-section,
+  .history-section {
+      /* width: 100%; */
+  }
+
+  .subject-item {
+      flex-direction: row;
+      align-items: center;
+      justify-content: space-between;
+  }
+
+  .remove-button {
+      align-self: center;
+  }
+}
+
+/* Smaller Tablets and Phones (Pixel 7, iPhone SE, etc.) */
+@media screen and (max-width: 768px) {
+  .dashboard-content {
+      flex-direction: column;
+  }
+
+  .subjects-section,
+  .history-section {
+      /* width: 100%; */
+  }
+
+  .subject-item {
+      flex-direction: column;
+      align-items: flex-start;
+  }
+
+  .remove-button {
+      align-self: flex-end;
+  }
+}
+
+/* Small Phones (iPhone SE, Galaxy A51, etc.) */
+@media screen and (max-width: 480px) {
+  .dashboard-container {
+      padding: 10px;
+  }
+
+  .subject-item {
+      padding: 8px;
+      font-size: 14px;
+  }
+
+  .add-button,
+  .remove-button {
+      padding: 8px;
+      font-size: 12px;
+  }
+
+  .popup {
+      width: 90%;
+      padding: 15px;
+  }
+}

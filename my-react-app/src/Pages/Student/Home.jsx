@@ -29,7 +29,7 @@ const Home = () => {
         throw new Error("Student ID not found in token.");
       }
 
-      fetch(`http://localhost:5084/api/Student/get-student-quizzes/${studentId}`, {
+      fetch(`http://localhost:5000/api/Student/get-student-quizzes/${studentId}`, {
         method: "GET",
         headers: { "Authorization": `Bearer ${token}` },
       })

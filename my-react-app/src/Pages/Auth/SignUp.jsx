@@ -72,62 +72,84 @@ const SignUp = () => {
 
   const handleSubmit = async (e) => {
     e.preventDefault();
-
+  
     if (isSignUp) {
       const { fullName, email, password, confirmPassword, selectedSubjects } = formData;
-
+  
       if (!fullName || !email || !password || !confirmPassword) {
         showToast("All fields are required!", "error");
         return;
       }
-
+  
       if (password !== confirmPassword) {
         showToast("Passwords do not match!", "error");
         return;
       }
-
+  
       if (selectedSubjects.length < 5) {
         showToast("Please select at least 5 subjects!", "error");
         return;
       }
-
-      console.log("Registration Successful:", formData);
-      showToast("Registration Successful!", "success");
-
-      setTimeout(() => {
-        setIsSignUp(false);
-        setFormData({
-          fullName: "",
-          email: "",
-          password: "",
-          confirmPassword: "",
-          selectedSubjects: [],
+  
+      const subjectsString = selectedSubjects.map((subj) => subj.value).join(", ");
+  
+      try {
+        const response = await fetch("http://localhost:5000/api/auth/register", {
+          method: "POST",
+          headers: { "Content-Type": "application/json" },
+          body: JSON.stringify({
+            fullName,
+            email,
+            password,
+            subjects: subjectsString,
+          }),
         });
-      }, 2000);
+  
+        const data = await response.json();
+  
+        if (!response.ok) {
+          throw new Error(data.message || "Registration failed!");
+        }
+  
+        showToast("Registration Successful!", "success");
+  
+        setTimeout(() => {
+          setIsSignUp(false);
+          setFormData({
+            fullName: "",
+            email: "",
+            password: "",
+            confirmPassword: "",
+            selectedSubjects: [],
+          });
+        }, 2000);
+      } catch (error) {
+        showToast(error.message, "error");
+      }
     } else {
       const { email, password } = formData;
-
+  
       if (!email || !password) {
         showToast("Email and Password are required!", "error");
         return;
       }
-
+  
       try {
-        const response = await fetch("http://localhost:5084/api/auth/login", {
+        const response = await fetch("http://localhost:5000/api/auth/login", {
           method: "POST",
           headers: { "Content-Type": "application/json" },
           body: JSON.stringify({ email, password }),
         });
-
+  
         const data = await response.json();
-
+  
         if (!response.ok) {
           throw new Error(data.message || "Login failed!");
         }
-
+  
         sessionStorage.setItem("token", data.token);
         showToast("Login Successful!", "success");
-
+  
         setTimeout(() => {
           navigate("/home");
         }, 1500);
@@ -136,6 +158,7 @@ const SignUp = () => {
       }
     }
   };
+  
 
   return (
     <div className="signup-container">

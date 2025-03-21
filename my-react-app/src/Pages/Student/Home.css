@@ -85,7 +85,9 @@
     right: 10px;
     width: 15%;
   }
-  
+  /* .scroll-btn.right:hover{
+background-color: none;
+  } */
   .scroll-btn img {
     width: 30px; /* Adjust size */
     height: auto;
