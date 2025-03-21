@@ -16,20 +16,45 @@ public partial class QuizAppContext : DbContext
     {
     }
 
+    public virtual DbSet<Admin> Admins { get; set; }
+
+    public virtual DbSet<PasswordResetToken> PasswordResetTokens { get; set; }
+
     public virtual DbSet<Models.Quiz> Quizzes { get; set; }
 
     public virtual DbSet<QuizQuestion> QuizQuestions { get; set; }
 
     public virtual DbSet<Student> Students { get; set; }
 
-    public DbSet<PasswordResetToken> PasswordResetTokens { get; set; }
     public virtual DbSet<StudentQuizResult> StudentQuizResults { get; set; }
 
     protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
-        => optionsBuilder.UseSqlServer("Name=DefaultConnection");
+#warning To protect potentially sensitive information in your connection string, you should move it out of source code. You can avoid scaffolding the connection string by using the Name= syntax to read it from configuration - see https://go.microsoft.com/fwlink/?linkid=2131148. For more guidance on storing connection strings, see https://go.microsoft.com/fwlink/?LinkId=723263.
+        => optionsBuilder.UseSqlServer("Server=DESKTOP-C7NEL36;Database=QuizApp;Trusted_Connection=True;MultipleActiveResultSets=true;Encrypt=False");
 
     protected override void OnModelCreating(ModelBuilder modelBuilder)
     {
+        modelBuilder.Entity<Admin>(entity =>
+        {
+            entity.HasKey(e => e.Id).HasName("PK__Admin__3214EC076DD4B4A1");
+
+            entity.ToTable("Admin");
+
+            entity.HasIndex(e => e.Email, "UQ__Admin__A9D10534B14F6D08").IsUnique();
+
+            entity.Property(e => e.Email).HasMaxLength(255);
+            entity.Property(e => e.FullName).HasMaxLength(255);
+        });
+
+        modelBuilder.Entity<PasswordResetToken>(entity =>
+        {
+            entity.HasKey(e => e.Id).HasName("PK__Password__3214EC0785B4AA7D");
+
+            entity.Property(e => e.Email).HasMaxLength(255);
+            entity.Property(e => e.ExpiryTime).HasColumnType("datetime");
+            entity.Property(e => e.Token).HasMaxLength(255);
+        });
+
         modelBuilder.Entity<Models.Quiz>(entity =>
         {
             entity.HasKey(e => e.Id).HasName("PK__Quizzes__3214EC072CBE37E8");
@@ -50,14 +75,13 @@ public partial class QuizAppContext : DbContext
             entity.Property(e => e.TopicLower)
                 .HasMaxLength(100)
                 .HasComputedColumnSql("(lower([Topic]))", true);
-
-            modelBuilder.Entity<StudentQuizResult>()
-            .ToTable("StudentQuizResults");
         });
 
         modelBuilder.Entity<QuizQuestion>(entity =>
         {
             entity.HasKey(e => e.Id).HasName("PK__QuizQues__3214EC071CD82382");
+
+            entity.ToTable(tb => tb.HasTrigger("trg_LimitQuizQuestions"));
 
             entity.Property(e => e.CorrectOption)
                 .HasMaxLength(1)
@@ -70,7 +94,8 @@ public partial class QuizAppContext : DbContext
 
             entity.HasOne(d => d.Quiz).WithMany(p => p.QuizQuestions)
                 .HasForeignKey(d => d.QuizId)
-                .HasConstraintName("FK__QuizQuest__QuizI__4222D4EF");
+                .OnDelete(DeleteBehavior.Cascade)
+                .HasConstraintName("FK_QuizQuestions_Quiz");
         });
 
         modelBuilder.Entity<Student>(entity =>
@@ -89,6 +114,8 @@ public partial class QuizAppContext : DbContext
         {
             entity.HasKey(e => e.Id).HasName("PK__StudentQ__3214EC0778FC72BE");
 
+            entity.ToTable(tb => tb.HasTrigger("trg_UpdateIsPassed"));
+
             entity.Property(e => e.AttemptedAt)
                 .HasDefaultValueSql("(getdate())")
                 .HasColumnType("datetime");
@@ -106,6 +133,4 @@ public partial class QuizAppContext : DbContext
     }
 
     partial void OnModelCreatingPartial(ModelBuilder modelBuilder);
-
-
 }

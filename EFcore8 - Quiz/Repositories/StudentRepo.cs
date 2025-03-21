@@ -23,5 +23,6 @@ namespace Quiz.Repositories
             await _context.SaveChangesAsync();
             return student;
         }
+
     }
 }

@@ -33,6 +33,8 @@ builder.Services.AddDbContext<QuizAppContext>(Options =>
 builder.Services.AddScoped<IAuthService, AuthService>();
 builder.Services.AddScoped<IStudentRepo, StudentRepo>();
 builder.Services.AddScoped<IEmailService, EmailService>();
+builder.Services.AddScoped<IAdminRepo, AdminRepo>(); // Register Admin Repository
+
 
 var app = builder.Build();
 

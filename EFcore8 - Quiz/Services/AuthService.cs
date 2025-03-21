@@ -14,14 +14,16 @@ namespace Quiz.Services
     public class AuthService : IAuthService
     {
         private readonly IStudentRepo _studentRepository;
+        private readonly IAdminRepo _adminRepository; // 🔹 Added Admin repository
         private readonly IConfiguration _config;
         private readonly QuizAppContext _context;
         private readonly IEmailService _emailService;
         private static Dictionary<string, string> _resetTokens = new Dictionary<string, string>(); // Stores email-token pairs
 
-        public AuthService(IStudentRepo studentRepository, IConfiguration config,QuizAppContext context, IEmailService emailService)
+        public AuthService(IStudentRepo studentRepository, IAdminRepo adminRepository, IConfiguration config, QuizAppContext context, IEmailService emailService)
         {
             _studentRepository = studentRepository;
+            _adminRepository = adminRepository; // 🔹 Injected admin repository
             _config = config;
             _context = context;
             _emailService = emailService;
@@ -55,21 +57,38 @@ namespace Quiz.Services
 
         private AuthResponse GenerateAuthResponse(Student student)
         {
-            var token = GenerateJwtToken(student);
+            var token = GenerateJwtToken(student, "Student");
             return new AuthResponse { StudentId = student.Id, Token = token, FullName = student.FullName };
         }
 
-        private string GenerateJwtToken(Student student)
+        private TokenResponse AdminAuthResponse(Admin admin)
+        {
+            var token = GenerateJwtToken(admin, "Admin");
+            return new TokenResponse { Id = admin.Id, Token = token, FullName = admin.FullName };
+        }
+
+        private string GenerateJwtToken(object user, string role)
         {
             var key = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(_config["Jwt:Secret"]));
             var credentials = new SigningCredentials(key, SecurityAlgorithms.HmacSha256);
 
-            var claims = new[]
+            List<Claim> claims = new List<Claim>
             {
-                new Claim(ClaimTypes.NameIdentifier, student.Id.ToString()),
-                new Claim(ClaimTypes.Name, student.FullName),
-                new Claim(ClaimTypes.Email, student.Email)
+                new Claim(ClaimTypes.Role, role)
             };
+
+            if (user is Student student)
+            {
+                claims.Add(new Claim(ClaimTypes.NameIdentifier, student.Id.ToString()));
+                claims.Add(new Claim(ClaimTypes.Name, student.FullName));
+                claims.Add(new Claim(ClaimTypes.Email, student.Email));
+            }
+            else if (user is Admin admin)
+            {
+                claims.Add(new Claim(ClaimTypes.NameIdentifier, admin.Id.ToString()));
+                claims.Add(new Claim(ClaimTypes.Name, admin.FullName));
+                claims.Add(new Claim(ClaimTypes.Email, admin.Email));
+            }
 
             var token = new JwtSecurityToken(
                 issuer: _config["Jwt:Issuer"],
@@ -87,40 +106,60 @@ namespace Quiz.Services
             var user = _context.Students.FirstOrDefault(u => u.Email == request.Email);
             if (user == null) return false;
 
-            var token = new Random().Next(100000, 999999).ToString(); // 🔹 Changed to a 6-digit numeric token instead of a Base64 string
+            var token = new Random().Next(100000, 999999).ToString(); // 🔹 Generate a 6-digit OTP
             _resetTokens[user.Email] = token; // 🔹 Store the token in memory
 
             // Send email
-            _emailService.SendPasswordResetEmail(user.Email, $"Your password reset code is: {token}"); // 🔹 Send only the numeric token, no reset link
+            _emailService.SendPasswordResetEmail(user.Email, $"Your password reset code is: {token}");
 
             return true;
         }
 
         public bool ResetPassword(ResetPasswordDTO request)
         {
-            // 🔹 Find the token in the database
             var resetToken = _context.PasswordResetTokens
                 .FirstOrDefault(t => t.Email == request.Email && t.Token == request.Token);
 
             if (resetToken == null || resetToken.ExpiryTime < DateTime.UtcNow)
-            {
                 return false; // 🔹 Token is invalid or expired
-            }
 
-            // 🔹 Find the user by email
             var user = _context.Students.FirstOrDefault(u => u.Email == request.Email);
             if (user == null) return false;
 
-            // 🔹 Update password securely
-            user.PasswordHash = BCrypt.Net.BCrypt.HashPassword(request.NewPassword);
+            // 🔹 Securely update password
+            user.PasswordHash = PasswordHasher.HashPassword(request.NewPassword);
             _context.SaveChanges();
 
-            // 🔹 Remove the used reset token
             _context.PasswordResetTokens.Remove(resetToken);
             _context.SaveChanges();
 
             return true;
         }
 
+        public async Task<TokenResponse?> AdminRegister(RegisterDTO registerDto)
+        {
+            var existingAdmin = await _adminRepository.GetAdminByEmailAsync(registerDto.Email);
+            if (existingAdmin != null) return null; // Email already exists
+
+            var newAdmin = new Admin
+            {
+                FullName = registerDto.FullName,
+                Email = registerDto.Email,
+                PasswordHash = PasswordHasher.HashPassword(registerDto.Password),
+                Subjects = registerDto.Subjects
+            };
+
+            await _adminRepository.CreateAdminAsync(newAdmin);
+            return AdminAuthResponse(newAdmin);
+        }
+
+        public async Task<TokenResponse?> AdminLogin(LoginDTO loginDto)
+        {
+            var admin = await _adminRepository.GetAdminByEmailAsync(loginDto.Email);
+            if (admin == null || !PasswordHasher.VerifyPassword(loginDto.Password, admin.PasswordHash))
+                return null;
+
+            return AdminAuthResponse(admin);
+        }
     }
 }

@@ -75,6 +75,38 @@
   },
   {
     "ContainingType": "Quiz.Controllers.AuthController",
+    "Method": "AdminLogin",
+    "RelativePath": "api/auth/admin/login",
+    "HttpMethod": "POST",
+    "IsController": true,
+    "Order": 0,
+    "Parameters": [
+      {
+        "Name": "loginDto",
+        "Type": "Quiz.DTOs.LoginDTO",
+        "IsRequired": true
+      }
+    ],
+    "ReturnTypes": []
+  },
+  {
+    "ContainingType": "Quiz.Controllers.AuthController",
+    "Method": "AdminRegister",
+    "RelativePath": "api/auth/admin/register",
+    "HttpMethod": "POST",
+    "IsController": true,
+    "Order": 0,
+    "Parameters": [
+      {
+        "Name": "registerDto",
+        "Type": "Quiz.DTOs.RegisterDTO",
+        "IsRequired": true
+      }
+    ],
+    "ReturnTypes": []
+  },
+  {
+    "ContainingType": "Quiz.Controllers.AuthController",
     "Method": "ForgotPassword",
     "RelativePath": "api/auth/forgot-password",
     "HttpMethod": "POST",

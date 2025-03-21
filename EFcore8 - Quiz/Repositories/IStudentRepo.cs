@@ -6,5 +6,6 @@ namespace Quiz.Repositories
     {
         Task<Student?> GetStudentByEmailAsync(string email);
         Task<Student> CreateStudentAsync(Student student);
+
     }
 }

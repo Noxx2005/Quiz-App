@@ -17,6 +17,7 @@ namespace Quiz.Controllers
             _authService = authService;
         }
 
+        // Student Registration
         [HttpPost("register")]
         public async Task<IActionResult> Register([FromBody] RegisterDTO registerDto)
         {
@@ -26,6 +27,7 @@ namespace Quiz.Controllers
             return Ok(result);
         }
 
+        // Student Login
         [HttpPost("login")]
         public async Task<IActionResult> Login([FromBody] LoginDTO loginDto)
         {
@@ -35,6 +37,27 @@ namespace Quiz.Controllers
             return Ok(result);
         }
 
+        // Admin Registration
+        [HttpPost("admin/register")]
+        public async Task<IActionResult> AdminRegister([FromBody] RegisterDTO registerDto)
+        {
+            var result = await _authService.AdminRegister(registerDto);
+            if (result == null) return BadRequest(new { message = "Admin email already in use" });
+
+            return Ok(result);
+        }
+
+        // Admin Login
+        [HttpPost("admin/login")]
+        public async Task<IActionResult> AdminLogin([FromBody] LoginDTO loginDto)
+        {
+            var result = await _authService.AdminLogin(loginDto);
+            if (result == null) return Unauthorized(new { message = "Invalid admin credentials" });
+
+            return Ok(result);
+        }
+
+        // Forgot Password (Students & Admins)
         [HttpPost("forgot-password")]
         public IActionResult ForgotPassword([FromBody] ForgotPasswordDTO request)
         {
@@ -43,6 +66,7 @@ namespace Quiz.Controllers
             return Ok("Password reset email sent.");
         }
 
+        // Reset Password (Students & Admins)
         [HttpPost("reset-password")]
         public IActionResult ResetPassword([FromBody] ResetPasswordDTO request)
         {
