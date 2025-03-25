@@ -2,8 +2,11 @@ import React, { useState, useEffect } from "react";
 import "./SignUp.css";
 import Select from "react-select";
 import { useNavigate } from "react-router-dom";
+import mage1 from "../../assets/qsd1.jpg";
+import mage2 from "../../assets/qsd2.jpg";
+import mage3 from "../../assets/qsd3.jpg";
 
-const images = ["/qsd1.jpg", "/qsd2.jpg", "/qsd3.jpg"];
+const images = [mage1, mage2, mage3];
 
 const scienceSubjects = [
   { value: "Physics", label: "Physics" },
