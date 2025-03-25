@@ -4,22 +4,26 @@ using Quiz.Models;
 
 namespace Quiz.Repositories
 {
-    public class AdminRepo:IAdminRepo
+    public class AdminRepo : IAdminRepo
     {
         private readonly QuizAppContext _context;
         public AdminRepo(QuizAppContext context)
         {
             _context = context;
         }
-        public async Task<Admin?> GetAdminByEmailAsync(string email)
+
+        public async Task<User?> GetAdminByEmailAsync(string email)
         {
-            return await _context.Admins.FirstOrDefaultAsync(a => a.Email == email);
+            return await _context.Users
+                .FirstOrDefaultAsync(a => a.Email == email && a.UserType == "Admin");
         }
 
-        public async Task CreateAdminAsync(Admin admin)
+        public async Task CreateAdminAsync(User admin)
         {
-            await _context.Admins.AddAsync(admin);
-            await _context.SaveChangesAsync();
+            var sql = "INSERT INTO Users (FullName, Email, PasswordHash, UserType) VALUES (@p0, @p1, @p2, 'Admin')";
+
+            await _context.Database.ExecuteSqlRawAsync(
+                sql, admin.FullName, admin.Email, admin.PasswordHash);
         }
     }
 }

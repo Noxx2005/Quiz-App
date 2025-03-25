@@ -9,8 +9,8 @@ namespace Quiz.Services
 
         public bool RequestPasswordReset(ForgotPasswordDTO request);
         public bool ResetPassword(ResetPasswordDTO request);
-        public Task<TokenResponse?> AdminRegister(RegisterDTO registerDto);
-        public Task<TokenResponse?> AdminLogin(LoginDTO loginDto);
+        public Task<AuthResponse?> AdminRegister(RegisterDTO registerDto);
+ 
 
     }
 }

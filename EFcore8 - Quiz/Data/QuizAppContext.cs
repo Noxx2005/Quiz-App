@@ -16,17 +16,17 @@ public partial class QuizAppContext : DbContext
     {
     }
 
-    public virtual DbSet<Admin> Admins { get; set; }
-
     public virtual DbSet<PasswordResetToken> PasswordResetTokens { get; set; }
 
     public virtual DbSet<Models.Quiz> Quizzes { get; set; }
 
     public virtual DbSet<QuizQuestion> QuizQuestions { get; set; }
 
-    public virtual DbSet<Student> Students { get; set; }
-
     public virtual DbSet<StudentQuizResult> StudentQuizResults { get; set; }
+
+    public virtual DbSet<Subject> Subjects { get; set; }
+
+    public virtual DbSet<User> Users { get; set; }
 
     protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
 #warning To protect potentially sensitive information in your connection string, you should move it out of source code. You can avoid scaffolding the connection string by using the Name= syntax to read it from configuration - see https://go.microsoft.com/fwlink/?linkid=2131148. For more guidance on storing connection strings, see https://go.microsoft.com/fwlink/?LinkId=723263.
@@ -34,18 +34,6 @@ public partial class QuizAppContext : DbContext
 
     protected override void OnModelCreating(ModelBuilder modelBuilder)
     {
-        modelBuilder.Entity<Admin>(entity =>
-        {
-            entity.HasKey(e => e.Id).HasName("PK__Admin__3214EC076DD4B4A1");
-
-            entity.ToTable("Admin");
-
-            entity.HasIndex(e => e.Email, "UQ__Admin__A9D10534B14F6D08").IsUnique();
-
-            entity.Property(e => e.Email).HasMaxLength(255);
-            entity.Property(e => e.FullName).HasMaxLength(255);
-        });
-
         modelBuilder.Entity<PasswordResetToken>(entity =>
         {
             entity.HasKey(e => e.Id).HasName("PK__Password__3214EC0785B4AA7D");
@@ -98,18 +86,6 @@ public partial class QuizAppContext : DbContext
                 .HasConstraintName("FK_QuizQuestions_Quiz");
         });
 
-        modelBuilder.Entity<Student>(entity =>
-        {
-            entity.HasKey(e => e.Id).HasName("PK__Students__3214EC0785DDDF75");
-
-            entity.HasIndex(e => e.Email, "UQ__Students__A9D105340749DAEE").IsUnique();
-
-            entity.Property(e => e.Email).HasMaxLength(255);
-            entity.Property(e => e.FullName).HasMaxLength(100);
-            entity.Property(e => e.IsSuspended).HasDefaultValue(false);
-            entity.Property(e => e.PasswordHash).HasMaxLength(255);
-        });
-
         modelBuilder.Entity<StudentQuizResult>(entity =>
         {
             entity.HasKey(e => e.Id).HasName("PK__StudentQ__3214EC0778FC72BE");
@@ -126,7 +102,29 @@ public partial class QuizAppContext : DbContext
 
             entity.HasOne(d => d.Student).WithMany(p => p.StudentQuizResults)
                 .HasForeignKey(d => d.StudentId)
-                .HasConstraintName("FK__StudentQu__Stude__44FF419A");
+                .HasConstraintName("FK_StudentQuizResults_Users");
+        });
+
+        modelBuilder.Entity<Subject>(entity =>
+        {
+            entity.HasKey(e => e.Id).HasName("PK__Subject__3214EC07F5889897");
+
+            entity.ToTable("Subject");
+
+            entity.Property(e => e.Name).HasMaxLength(255);
+        });
+
+        modelBuilder.Entity<User>(entity =>
+        {
+            entity.HasKey(e => e.Id).HasName("PK__Users__3214EC279D5D4B0C");
+
+            entity.HasIndex(e => e.Email, "UQ__Users__A9D1053425CBD5A3").IsUnique();
+
+            entity.Property(e => e.Id).HasColumnName("ID");
+            entity.Property(e => e.Email).HasMaxLength(255);
+            entity.Property(e => e.FullName).HasMaxLength(255);
+            entity.Property(e => e.PasswordHash).HasMaxLength(255);
+            entity.Property(e => e.UserType).HasMaxLength(50);
         });
 
         OnModelCreatingPartial(modelBuilder);

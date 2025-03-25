@@ -13,7 +13,7 @@ function App() {
   return (
     <Router>
       {/* <Navbar /> */}
-      <ProfileIcon />
+      {/* <ProfileIcon /> */}
       <Routes>
         <Route path="/Quiz" element={<Quiz/>} />
         <Route path="/home" element={<Home />} />

@@ -51,7 +51,7 @@ namespace Quiz.Controllers
         [HttpPost("admin/login")]
         public async Task<IActionResult> AdminLogin([FromBody] LoginDTO loginDto)
         {
-            var result = await _authService.AdminLogin(loginDto);
+            var result = await _authService.LoginAsync(loginDto);
             if (result == null) return Unauthorized(new { message = "Invalid admin credentials" });
 
             return Ok(result);

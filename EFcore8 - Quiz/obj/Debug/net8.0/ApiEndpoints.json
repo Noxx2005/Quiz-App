@@ -43,14 +43,14 @@
   },
   {
     "ContainingType": "Quiz.Controllers.AdminController",
-    "Method": "SuspendStudent",
-    "RelativePath": "api/admin/suspend-student/{studentId}",
+    "Method": "SuspendUser",
+    "RelativePath": "api/admin/suspend-user/{userId}",
     "HttpMethod": "PUT",
     "IsController": true,
     "Order": 0,
     "Parameters": [
       {
-        "Name": "studentId",
+        "Name": "userId",
         "Type": "System.Int32",
         "IsRequired": true
       }
@@ -202,15 +202,15 @@
     "ReturnTypes": []
   },
   {
-    "ContainingType": "Quiz.Controllers.StudentController",
-    "Method": "GetStudentQuizzes",
-    "RelativePath": "api/Student/get-student-quizzes/{studentId}",
+    "ContainingType": "Quiz.Controllers.UserController",
+    "Method": "GetUserQuizzes",
+    "RelativePath": "api/User/get-user-quizzes/{userId}",
     "HttpMethod": "GET",
     "IsController": true,
     "Order": 0,
     "Parameters": [
       {
-        "Name": "studentId",
+        "Name": "userId",
         "Type": "System.Int32",
         "IsRequired": true
       }
@@ -218,25 +218,25 @@
     "ReturnTypes": []
   },
   {
-    "ContainingType": "Quiz.Controllers.StudentController",
+    "ContainingType": "Quiz.Controllers.UserController",
     "Method": "GetQuizHistory",
-    "RelativePath": "api/Student/history",
+    "RelativePath": "api/User/history/{userId}",
     "HttpMethod": "GET",
     "IsController": true,
     "Order": 0,
     "Parameters": [
       {
-        "Name": "studentId",
+        "Name": "userId",
         "Type": "System.Int32",
-        "IsRequired": false
+        "IsRequired": true
       }
     ],
     "ReturnTypes": []
   },
   {
-    "ContainingType": "Quiz.Controllers.StudentController",
-    "Method": "GetStudentProfile",
-    "RelativePath": "api/Student/profile",
+    "ContainingType": "Quiz.Controllers.UserController",
+    "Method": "GetUserProfile",
+    "RelativePath": "api/User/profile",
     "HttpMethod": "GET",
     "IsController": true,
     "Order": 0,
@@ -250,15 +250,15 @@
     "ReturnTypes": []
   },
   {
-    "ContainingType": "Quiz.Controllers.StudentController",
+    "ContainingType": "Quiz.Controllers.UserController",
     "Method": "UpdateSubjects",
-    "RelativePath": "api/Student/profile/update-subjects",
+    "RelativePath": "api/User/profile/update-subjects",
     "HttpMethod": "PUT",
     "IsController": true,
     "Order": 0,
     "Parameters": [
       {
-        "Name": "studentId",
+        "Name": "userId",
         "Type": "System.Int32",
         "IsRequired": false
       },
@@ -271,9 +271,9 @@
     "ReturnTypes": []
   },
   {
-    "ContainingType": "Quiz.Controllers.StudentController",
+    "ContainingType": "Quiz.Controllers.UserController",
     "Method": "SubmitQuizResult",
-    "RelativePath": "api/Student/submit-quiz",
+    "RelativePath": "api/User/submit-quiz",
     "HttpMethod": "POST",
     "IsController": true,
     "Order": 0,
@@ -281,6 +281,22 @@
       {
         "Name": "quizResultDto",
         "Type": "Quiz.DTOs.StudentQuizResultDto",
+        "IsRequired": true
+      }
+    ],
+    "ReturnTypes": []
+  },
+  {
+    "ContainingType": "Quiz.Controllers.UserController",
+    "Method": "SuspendUser",
+    "RelativePath": "api/User/suspend-user/{userId}",
+    "HttpMethod": "PUT",
+    "IsController": true,
+    "Order": 0,
+    "Parameters": [
+      {
+        "Name": "userId",
+        "Type": "System.Int32",
         "IsRequired": true
       }
     ],

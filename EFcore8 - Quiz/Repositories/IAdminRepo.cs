@@ -4,7 +4,7 @@ namespace Quiz.Repositories
 {
     public interface IAdminRepo
     {
-        Task<Admin?> GetAdminByEmailAsync(string email);
-        Task CreateAdminAsync(Admin admin);
+        Task<User?> GetAdminByEmailAsync(string email);
+        Task CreateAdminAsync(User admin);
     }
 }

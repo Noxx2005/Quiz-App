@@ -61,28 +61,29 @@ namespace Quiz.Controllers
             return Ok(new { message = $"Quiz {(quiz.IsActive == true ? "enabled" : "disabled")} successfully", quiz });
         }
 
-        [HttpPut("suspend-student/{studentId}")]
-        public async Task<IActionResult> SuspendStudent(int studentId)
+        [HttpPut("suspend-user/{userId}")]
+        public async Task<IActionResult> SuspendUser(int userId)
         {
-            var student = await _context.Students.FindAsync(studentId);
+            var user = await _context.Users.FindAsync(userId); // Replace `Users` with the correct table
 
-            if (student == null)
+            if (user == null)
             {
-                return NotFound(new { message = "Student not found." });
+                return NotFound(new { message = "User not found." });
             }
 
-            // Ensure IsSuspended is not null before toggling
-            student.IsSuspended = !(student.IsSuspended ?? false);
+            // Toggle suspension status
+            user.IsSuspended = !(user.IsSuspended ?? false);
 
             await _context.SaveChangesAsync();
 
             return Ok(new
             {
-                message = student.IsSuspended == true
-                    ? $"Student {student.FullName} has been suspended."
-                    : $"Student {student.FullName} has been reinstated."
+                message = user.IsSuspended == true
+                    ? $"User {user.FullName} has been suspended."
+                    : $"User {user.FullName} has been reinstated."
             });
         }
+
 
         [HttpGet("get-results/{quizId}")]
         public async Task<IActionResult> GetQuizResults(int quizId)

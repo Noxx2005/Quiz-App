@@ -7,6 +7,7 @@ import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faChevronLeft, faChevronRight } from "@fortawesome/free-solid-svg-icons";
 import Navbar from "../../Components/Navbar";
 import { jwtDecode } from "jwt-decode";
+import ProfileIcon from "./ProfileIcon";
 const Home = () => {
   const [quizzes, setQuizzes] = useState([]);
   const [searchQuery, setSearchQuery] = useState("");
@@ -29,7 +30,7 @@ const Home = () => {
         throw new Error("Student ID not found in token.");
       }
 
-      fetch(`http://localhost:5000/api/Student/get-student-quizzes/${studentId}`, {
+      fetch(`http://localhost:5000/api/User/get-user-quizzes/${studentId}`, {
         method: "GET",
         headers: { "Authorization": `Bearer ${token}` },
       })
@@ -107,6 +108,7 @@ const Home = () => {
           </div>
         </div>
       </div>
+      <ProfileIcon />
     </div>
   );
 };

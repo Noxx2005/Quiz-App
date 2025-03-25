@@ -16,15 +16,16 @@ const scienceSubjects = [
   { value: "Computer Science", label: "Computer Science" },
   { value: "Environmental Science", label: "Environmental Science" },
   { value: "Statistics", label: "Statistics" },
-  {value:"Astronomy" , label:"Astronomy"}
+  { value: "Astronomy", label: "Astronomy" },
 ];
 
 const SignUp = () => {
   const [currentSlide, setCurrentSlide] = useState(0);
-  const [isSignUp, setIsSignUp] = useState(false); // Set to false to show Login first
+  const [isSignUp, setIsSignUp] = useState(false);
   const [inputsDisabled, setInputsDisabled] = useState(false);
   const [toastMessage, setToastMessage] = useState("");
   const [toastType, setToastType] = useState("");
+  const [isAdmin, setIsAdmin] = useState(false);
   const navigate = useNavigate();
 
   const [formData, setFormData] = useState({
@@ -96,8 +97,12 @@ const SignUp = () => {
   
       const subjectsString = selectedSubjects.map((subj) => subj.value).join(", ");
   
+      const registerUrl = isAdmin
+        ? "http://localhost:5000/api/auth/admin/register"
+        : "http://localhost:5000/api/auth/register";
+  
       try {
-        const response = await fetch("http://localhost:5000/api/auth/register", {
+        const response = await fetch(registerUrl, {
           method: "POST",
           headers: { "Content-Type": "application/json" },
           body: JSON.stringify({
@@ -130,18 +135,11 @@ const SignUp = () => {
         showToast(error.message, "error");
       }
     } else {
-      const { email, password } = formData;
-  
-      if (!email || !password) {
-        showToast("Email and Password are required!", "error");
-        return;
-      }
-  
       try {
         const response = await fetch("http://localhost:5000/api/auth/login", {
           method: "POST",
           headers: { "Content-Type": "application/json" },
-          body: JSON.stringify({ email, password }),
+          body: JSON.stringify({ email: formData.email, password: formData.password }),
         });
   
         const data = await response.json();
@@ -151,10 +149,17 @@ const SignUp = () => {
         }
   
         sessionStorage.setItem("token", data.token);
+        sessionStorage.setItem("role", data.role);
         showToast("Login Successful!", "success");
   
         setTimeout(() => {
-          navigate("/home");
+          if (data.role === "Admin") {
+            navigate("/Dashboard");
+          } else if (data.role === "Student") {
+            navigate("/Home");
+          } else {
+            navigate("/home");
+          }
         }, 1500);
       } catch (error) {
         showToast(error.message, "error");
@@ -162,7 +167,6 @@ const SignUp = () => {
     }
   };
   
-
   return (
     <div className="signup-container">
       {toastMessage && <div className={`toast ${toastType}`}>{toastMessage}</div>}
@@ -194,8 +198,18 @@ const SignUp = () => {
           {isSignUp && (
             <>
               <input type="password" name="confirmPassword" placeholder="Confirm Password" value={formData.confirmPassword} onChange={handleChange} required disabled={inputsDisabled} />
+              <label className="admin-label">
+                <input className="admin-checkbox" type="checkbox" checked={isAdmin} onChange={() => setIsAdmin(!isAdmin)} />
+                Register as Admin
+              </label>
               <label>Select Subjects:</label>
-              <Select options={scienceSubjects} isMulti value={formData.selectedSubjects} onChange={handleSubjectChange} className="subject-dropdown" isDisabled={inputsDisabled} />
+              <Select   options={scienceSubjects}
+  isMulti
+  value={formData.selectedSubjects}
+  onChange={handleSubjectChange}
+  className="subject-dropdown"
+  isDisabled={inputsDisabled}
+  menuPlacement="auto" />
             </>
           )}
 

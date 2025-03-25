@@ -9,7 +9,7 @@ const Quiz = () => {
 
   const { quizId, time } = location.state || { quizId: null, time: 5 };
   const API_URL = `http://localhost:5000/api/Quiz/GetQuizQuestions/${quizId}`;
-  const SUBMIT_API_URL = "http://localhost:5000/api/Student/submit-quiz";
+  const SUBMIT_API_URL = "http://localhost:5000/api/User/submit-quiz";
 
   const getStudentIdFromToken = () => {
     const token = sessionStorage.getItem("token");

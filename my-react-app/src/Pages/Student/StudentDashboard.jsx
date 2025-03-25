@@ -24,7 +24,7 @@ const StudentDashboard = () => {
     const email = decoded["http://schemas.xmlsoap.org/ws/2005/05/identity/claims/emailaddress"];
 
     // Fetch Student Profile
-    fetch(`http://localhost:5000/api/Student/profile?email=${email}`)
+    fetch(`http://localhost:5000/api/User/profile?email=${email}`)
       .then((res) => res.json())
       .then((data) => {
         setProfile({ id: studentId, fullName, email, isSuspended: data.isSuspended });
@@ -33,7 +33,7 @@ const StudentDashboard = () => {
       .catch((err) => console.error("Error fetching profile:", err));
 
     // Fetch Quiz History
-    fetch(`http://localhost:5000/api/Student/history?studentId=${studentId}`)
+    fetch(`http://localhost:5000/api/User/history?studentId=${studentId}`)
       .then((res) => res.json())
       .then((data) => setHistory(data))
       .catch((err) => console.error("Error fetching history:", err));
@@ -43,7 +43,7 @@ const StudentDashboard = () => {
   const updateSubjects = (subject, action) => {
     if (!profile) return;
 
-    fetch(`http://localhost:5000/api/Student/profile/update-subjects?studentId=${profile.id}`, {
+    fetch(`http://localhost:5000/api/User/profile/update-subjects?studentId=${profile.id}`, {
       method: "PUT",
       headers: { "Content-Type": "application/json" },
       body: JSON.stringify({ subject, action }),

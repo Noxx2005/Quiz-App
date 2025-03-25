@@ -1,42 +1,40 @@
-﻿using Microsoft.AspNetCore.Cors;
-using Microsoft.AspNetCore.Http;
-using Microsoft.AspNetCore.Mvc;
+﻿using Microsoft.AspNetCore.Mvc;
 using Microsoft.Data.SqlClient;
 using Microsoft.EntityFrameworkCore;
 using Quiz.Data;
 using Quiz.DTOs;
 using Quiz.Models;
+using System;
+using System.Collections.Generic;
+using System.Linq;
+using System.Threading.Tasks;
 
 namespace Quiz.Controllers
 {
-    //[EnableCors("AllowAllOrigins")]
     [Route("api/[controller]")]
     [ApiController]
-    public class StudentController : ControllerBase
+    public class UserController : ControllerBase
     {
         private readonly QuizAppContext _context;
 
-        public StudentController(QuizAppContext context)
+        public UserController(QuizAppContext context)
         {
             _context = context;
         }
 
-        [HttpGet("get-student-quizzes/{studentId}")]
-        public async Task<IActionResult> GetStudentQuizzes(int studentId)
+        // ✅ Get quizzes based on user's subjects
+        [HttpGet("get-user-quizzes/{userId}")]
+        public async Task<IActionResult> GetUserQuizzes(int userId)
         {
-            var student = await _context.Students.FindAsync(studentId);
+            var user = await _context.Users.FindAsync(userId); // Update to Users
 
-            if (student == null)
-            {
-                return NotFound(new { message = "Student not found." });
-            }
+            if (user == null)
+                return NotFound(new { message = "User not found." });
 
-            if (string.IsNullOrEmpty(student.Subjects))
-            {
-                return NotFound(new { message = "No subjects found for this student." });
-            }
+            if (string.IsNullOrEmpty(user.Subjects))
+                return NotFound(new { message = "No subjects found for this user." });
 
-            var subjects = student.Subjects.Split(',').Select(s => s.Trim()).ToList();
+            var subjects = user.Subjects.Split(',').Select(s => s.Trim()).ToList();
 
             var quizzes = await _context.Quizzes
                 .Where(q => subjects.Contains(q.Subject))
@@ -48,38 +46,29 @@ namespace Quiz.Controllers
                     q.Description,
                     q.CreatedAt,
                     q.IsActive,
-                    q.Time 
+                    q.Time
                 })
                 .ToListAsync();
 
-            if (!quizzes.Any())
-            {
-                return NotFound(new { message = "No quizzes available for the student's subjects." });
-            }
-
-            return Ok(quizzes);
+            return quizzes.Any() ? Ok(quizzes) : NotFound(new { message = "No quizzes available." });
         }
 
+        // ✅ Update user subjects (add/remove)
         [HttpPut("profile/update-subjects")]
-        public async Task<IActionResult> UpdateSubjects(int studentId, [FromBody] SubjectUpdateDTO request)
+        public async Task<IActionResult> UpdateSubjects(int userId, [FromBody] SubjectUpdateDTO request)
         {
-            var student = await _context.Students.FindAsync(studentId);
+            var user = await _context.Users.FindAsync(userId);
 
-            if (student == null)
-            {
-                return NotFound(new { message = "Student not found." });
-            }
+            if (user == null)
+                return NotFound(new { message = "User not found." });
 
-            var subjectsList = string.IsNullOrEmpty(student.Subjects)
+            var subjectsList = string.IsNullOrEmpty(user.Subjects)
                 ? new List<string>()
-                : student.Subjects.Split(',').Select(s => s.Trim()).ToList();
+                : user.Subjects.Split(',').Select(s => s.Trim()).ToList();
 
-            if (request.Action == "add")
+            if (request.Action == "add" && !subjectsList.Contains(request.Subject, StringComparer.OrdinalIgnoreCase))
             {
-                if (!subjectsList.Contains(request.Subject, StringComparer.OrdinalIgnoreCase))
-                {
-                    subjectsList.Add(request.Subject);
-                }
+                subjectsList.Add(request.Subject);
             }
             else if (request.Action == "remove")
             {
@@ -90,40 +79,38 @@ namespace Quiz.Controllers
                 return BadRequest(new { message = "Invalid action. Use 'add' or 'remove'." });
             }
 
-            student.Subjects = string.Join(", ", subjectsList);
-            _context.Students.Update(student);
+            user.Subjects = string.Join(", ", subjectsList);
+            _context.Users.Update(user);
             await _context.SaveChangesAsync();
 
-            return Ok(new { message = "Subjects updated successfully.", updatedSubjects = student.Subjects });
+            return Ok(new { message = "Subjects updated successfully.", updatedSubjects = user.Subjects });
         }
+
+        // ✅ Get user profile
         [HttpGet("profile")]
-        public async Task<IActionResult> GetStudentProfile(string email)
+        public async Task<IActionResult> GetUserProfile(string email)
         {
-            var student = await _context.Students
-                .Where(s => s.Email == email)
-                .Select(s => new
+            var user = await _context.Users
+                .Where(u => u.Email == email)
+                .Select(u => new
                 {
-                    s.Id,
-                    s.FullName,
-                    s.Email,
-                    s.Subjects,
-                    s.IsSuspended
+                    u.Id,
+                    u.FullName,
+                    u.Email,
+                    u.Subjects,
+                    u.IsSuspended
                 })
                 .FirstOrDefaultAsync();
 
-            if (student == null)
-            {
-                return NotFound(new { message = "Student not found." });
-            }
-
-            return Ok(student);
+            return user != null ? Ok(user) : NotFound(new { message = "User not found." });
         }
 
-        [HttpGet("history")]
-        public async Task<IActionResult> GetQuizHistory(int studentId)
+        // ✅ Get quiz history for user
+        [HttpGet("history/{userId}")]
+        public async Task<IActionResult> GetQuizHistory(int userId)
         {
             var quizHistory = await _context.StudentQuizResults
-                .Where(sqr => sqr.StudentId == studentId)
+                .Where(sqr => sqr.StudentId == userId) // Ensure `StudentId` is updated to `UserId` if necessary
                 .Join(
                     _context.Quizzes,
                     sqr => sqr.QuizId,
@@ -143,27 +130,22 @@ namespace Quiz.Controllers
             return Ok(quizHistory);
         }
 
+        // ✅ Submit quiz result using a stored procedure
         [HttpPost("submit-quiz")]
         public async Task<IActionResult> SubmitQuizResult([FromBody] StudentQuizResultDto quizResultDto)
         {
             if (quizResultDto == null)
-            {
                 return BadRequest("Invalid data.");
-            }
 
-            // Check if the QuizId exists in the Quizzes table
             var quizExists = await _context.Quizzes.AnyAsync(q => q.Id == quizResultDto.QuizId);
             if (!quizExists)
-            {
                 return NotFound("Quiz not found.");
-            }
 
             try
             {
-                // Call the stored procedure to insert or update the quiz result
                 await _context.Database.ExecuteSqlRawAsync(
-                    "EXEC InsertOrUpdateStudentQuizResult @StudentId, @QuizId, @Score",
-                    new SqlParameter("@StudentId", quizResultDto.StudentId),
+                    "EXEC InsertOrUpdateStudentQuizResult @UserId, @QuizId, @Score",
+                    new SqlParameter("@UserId", quizResultDto.StudentId),  // Change `StudentId` to `UserId` if applicable
                     new SqlParameter("@QuizId", quizResultDto.QuizId),
                     new SqlParameter("@Score", quizResultDto.Score)
                 );
@@ -172,13 +154,28 @@ namespace Quiz.Controllers
             }
             catch (Exception ex)
             {
-                // Log the error (optional)
                 Console.Error.WriteLine($"Error submitting quiz result: {ex.Message}");
                 return StatusCode(500, "An error occurred while submitting the quiz result.");
             }
         }
 
+        // ✅ Suspend or reinstate a user
+        [HttpPut("suspend-user/{userId}")]
+        public async Task<IActionResult> SuspendUser(int userId)
+        {
+            var user = await _context.Users.FindAsync(userId);
+            if (user == null)
+                return NotFound(new { message = "User not found." });
 
+            user.IsSuspended = !(user.IsSuspended ?? false);
+            await _context.SaveChangesAsync();
 
+            return Ok(new
+            {
+                message = user.IsSuspended == true
+                    ? $"User {user.FullName} has been suspended."
+                    : $"User {user.FullName} has been reinstated."
+            });
+        }
     }
 }

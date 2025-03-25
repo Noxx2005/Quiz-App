@@ -2,8 +2,9 @@
 {
     public class AuthResponse
     {
-        public int StudentId { get; set; }
+        public int UserId { get; set; }
         public string Token { get; set; } = null!;
         public string FullName { get; set; } = null!;
+        public string Role { get; set; } = null!;
     }
 }

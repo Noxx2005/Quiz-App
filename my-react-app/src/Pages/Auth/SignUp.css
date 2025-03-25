@@ -1,4 +1,10 @@
 /* Set the slideshow as a full-page background */
+.signup-container{
+  height: 100vh; /* Full screen height */
+  /* display: flex; */
+  justify-content: center;
+  align-items: center;
+}
 .slideshow {
   /* position: fixed; */
   top: 0;
@@ -7,6 +13,17 @@
   height: 100vh;
   overflow: hidden;
   z-index: -2;
+}
+.admin-label {
+  display: flex;
+  align-items: center;
+  gap: 8px; 
+}
+
+.admin-checkbox {
+  width: 16px;
+  height: 16px;
+  cursor: pointer;
 }
 
 .slideshow img {
@@ -42,14 +59,28 @@
   left: 50%;
   transform: translate(-50%, -50%);
   background: rgba(255, 255, 255, 0.1); /* Slight transparency */
-  /* backdrop-filter: blur(10px); */
+  backdrop-filter: blur(10px);
   padding: 50px;
   border-radius: 10px;
   text-align: center;
   width: 350px;
   box-shadow: 0px 0px 10px rgba(0, 0, 0, 0.2);
 }
-
+@media screen and (max-width: 1023px) {
+  .form-container {
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    background: rgba(255, 255, 255, 0.1); /* Slight transparency */
+    backdrop-filter: blur(10px);
+    padding: 50px;
+    border-radius: 10px;
+    text-align: center;
+    width: 60%;
+    box-shadow: 0px 0px 10px rgba(0, 0, 0, 0.2);
+  }
+}
 /* Form styles */
 form {
   display: flex;

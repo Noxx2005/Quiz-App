@@ -19,5 +19,5 @@ public partial class StudentQuizResult
 
     public virtual Quiz? Quiz { get; set; }
 
-    public virtual Student? Student { get; set; }
+    public virtual User? Student { get; set; }
 }

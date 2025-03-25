@@ -3,15 +3,17 @@ using System.Collections.Generic;
 
 namespace Quiz.Models;
 
-public partial class Student
+public partial class User
 {
     public int Id { get; set; }
 
-    public string FullName { get; set; } = null!;
+    public string? FullName { get; set; }
 
-    public string Email { get; set; } = null!;
+    public string? Email { get; set; }
 
-    public string PasswordHash { get; set; } = null!;
+    public string? PasswordHash { get; set; }
+
+    public string? UserType { get; set; }
 
     public string? Subjects { get; set; }
 
