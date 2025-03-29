@@ -1,111 +1,113 @@
 .home-container {
-  width: 100%;  /* Full viewport width */
-  /* height: 100vh; */
+  width: 100%;
   display: flex;
   flex-direction: column;
 }
 
-  
-  /* Top section */
-  .top-section {
-    /* height: 30%; */
-    /* margin-top: 99px; */
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    background:White;
-    color: black;
-    font-size: 2.0rem;
-    font-weight: bold;
-  }
-  
-  .top-section span {
-    color: green;
-  }
-  
-  /* Bottom section */
-  .bottom-section {
-    height: 60%;
-    background: white;
-    padding: 20px;
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-  }
-  
-  /* Quiz List Container */
-  .quiz-list {
-    display: flex;
-    align-items: center;
-    /* width: 80%; */
-    overflow: hidden;
-    /* position: relative;   */
-  }
-
-  .scroll-btn:focus,
-.scroll-btn:active {
-  outline: none;  /* Prevents focus outline */
-  border: none;   /* Ensures no border appears */
-  box-shadow: none; /* Removes any shadow effect */
+/* Mobile warning message - hidden by default */
+.mobile-warning {
+  display: none;
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background: white;
+  z-index: 1000;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  text-align: center;
+  padding: 20px;
 }
-  
-  /* Scroll Buttons */
-  /* .scroll-btn {
-    background: transparent;
-    border: none;
-    font-size: 24px;
-    cursor: pointer;
-    padding: 10px;
-    position: absolute;
-    top: 50%;
-    transform: translateY(-50%);
-    font-size: 240px;
-    color: #af4c4c;
-  }
-   */
 
-   .scroll-btn {
-    position: absolute;
-    /* top: 50%; */
-    transform: translateY(-50%);
-    background: none;
-    border: none;
-    cursor: pointer;
-    color: black;
-    font-size: 24px;
-    z-index: 10;
+.mobile-warning p {
+  font-size: 1.2rem;
+  margin-bottom: 20px;
+}
+
+/* Top section */
+.top-section {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: white;
+  color: black;
+  font-size: 2.0rem;
+  font-weight: bold;
+}
+
+.top-section span {
+  color: purple;
+}
+
+/* Bottom section */
+.bottom-section {
+  height: 60%;
+  background: white;
+  padding: 20px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+
+/* Quiz List Container */
+.quiz-list {
+  display: flex;
+  align-items: center;
+  overflow: hidden;
+}
+
+.scroll-btn:focus,
+.scroll-btn:active {
+  outline: none;
+  border: none;
+  box-shadow: none;
+}
+
+.scroll-btn {
+  position: absolute;
+  transform: translateY(-50%);
+  background: none;
+  border: none;
+  cursor: pointer;
+  color: black;
+  font-size: 24px;
+  z-index: 10;
+}
+
+.scroll-btn.left {
+  left: 10px;
+  width: 15%;
+}
+
+.scroll-btn.right {
+  right: 10px;
+  width: 15%;
+}
+
+.scroll-btn img {
+  width: 30px;
+  height: auto;
+}
+
+/* Cards Wrapper */
+.quiz-card2s {
+  display: flex;
+  gap: 20px;
+  overflow-x: hidden;
+  transition: transform 0.3s ease-in-out;
+}
+
+/* Show mobile warning on tablets and phones */
+@media (max-width: 1024px) {
+  .home-container {
+    display: none;
   }
   
-  .scroll-btn.left {
-    left: 10px;
-    width: 15%;
-  }
-  
-  .scroll-btn.right {
-    right: 10px;
-    width: 15%;
-  }
-  /* .scroll-btn.right:hover{
-background-color: none;
-  } */
-  .scroll-btn img {
-    width: 30px; /* Adjust size */
-    height: auto;
-  }
-  
-    /* .left {
-      left: 0;
-    }
-    
-    .right {
-      right: 0;
-    } */
-  
-  /* Cards Wrapper */
-  .quiz-card2s {
+  .mobile-warning {
     display: flex;
-    gap: 20px;
-    overflow-x: hidden;
-    transition: transform 0.3s ease-in-out;
   }
-  
+}
+
+/* Original desktop styles remain unchanged */

@@ -81,7 +81,7 @@ const StudentDashboard = () => {
       </div>
 
       {/* Section 2 & 3: Subjects and Quiz History */}
-      <div className="dashboard-content">
+      <div className="dashboard-content1">
         {/* Subjects Section */}
         <div className="subjects-section">
           <h2>Subjects</h2>

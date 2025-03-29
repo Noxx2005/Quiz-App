@@ -36,7 +36,7 @@ select {
   background-size: 12px auto;
 }
 
-button {
+.buto {
   background-color: #3498db;
   color: white;
   border: none;
@@ -49,7 +49,7 @@ button {
 }
 
 button:hover {
-  background-color: #2980b9;
+  /* background-color: #2980b9; */
 }
 
 /* Responsive styles */

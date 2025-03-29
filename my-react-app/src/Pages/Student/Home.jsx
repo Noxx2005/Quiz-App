@@ -81,7 +81,13 @@ const Home = () => {
   return (
     <div>
       <Navbar />
+      <div className="mobile-warning">
+  <h2>Please Open on a Laptop or Desktop</h2>
+  <p>This application is designed for larger screens.</p>
+  <p>For the best experience, please access it from a computer.</p>
+</div>
       <div className="home-container">
+        
         {/* Top Section */}
         <div className="top-section">
           <h1>Learn <span>10x Faster</span></h1>
@@ -96,7 +102,7 @@ const Home = () => {
               <FontAwesomeIcon icon={faChevronLeft} />
             </button>
 
-            <div className="quiz2-cards">
+            <div className="quiz-card2s">
               {filteredQuizzes.slice(visibleIndex, visibleIndex + 4).map((quiz) => (
                 <QuizCard key={quiz.id} quiz={quiz} onClick={() => handleQuizClick(quiz)} />
               ))}

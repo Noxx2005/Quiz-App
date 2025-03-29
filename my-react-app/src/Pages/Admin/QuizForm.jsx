@@ -158,7 +158,7 @@ const QuizForm = () => {
               <option value="D">Option D</option>
             </select>
             
-            <button type="submit">Submit Question</button>
+            <button className="buto" type="submit">Submit Question</button>
           </form>
         )}
       </div>

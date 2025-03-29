@@ -1,40 +1,44 @@
 .quiz2-card {
-    background: white;
-    padding: 7px;
-    display: flex;
-    flex-direction: column;
-    color: black;
-    padding-top: 0px;
-    /* font-size: small; */
-    border-radius: 10px;
-    border: 1.5px black solid;
-    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
-    text-align: center;
-    width: 200px;
-  }
-  
-  .quiz2-card h3 {
-    color: #4CAF50;
-    /* margin-bottom: 10px; */
-  }
-  
-  .quiz2-card p {
-    font-size: 15px;
-    font-weight: bold;
-  }
-  
-  .quiz-btn {
-    background-color: #4CAF50;
-    color: white;
-    border: none;
-    padding: 8px 15px;
-    border-radius: 5px;
-    cursor: pointer;
-    margin-top: 10px;
-    margin-top: auto;
-  }
-  
-  .quiz-btn:hover {
-    background-color: #388E3C;
-  }
-  
+  background: white;
+  padding: 7px;
+  display: flex;
+  flex-direction: column;
+  color: black; /* Default text color */
+  padding-top: 0px;
+  border-radius: 10px;
+  border: 1.5px solid black;
+  box-shadow: 0 0 10px rgba(128, 0, 128, 0.6); /* Purple glow */
+  text-align: center;
+  width: 200px;
+  transition: box-shadow 0.3s ease-in-out;
+}
+
+.quiz2-card:hover {
+  box-shadow: 0 0 15px rgba(128, 0, 128, 0.9); /* Stronger glow on hover */
+}
+
+.quiz2-card h3 {
+  color: purple; /* Title in purple */
+  font-weight: bold;
+}
+
+.quiz2-card p {
+  font-size: 15px;
+  font-weight: bold;
+  color: black; /* Ensuring readability */
+}
+
+.quiz-btn {
+  background-color: purple;
+  color: white;
+  border: none;
+  padding: 8px 15px;
+  border-radius: 5px;
+  cursor: pointer;
+  margin-top: 10px;
+  margin-top: auto;
+}
+
+.quiz-btn:hover {
+  background-color: black;
+}

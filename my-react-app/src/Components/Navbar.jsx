@@ -35,7 +35,7 @@ function Navbar() {
     <nav className="Custom-Navbar">
       <div className="Custom-Navbar-container">
         <div className="Custom-Navbar-brand">
-          <img src="/quizSpark_icon.png" alt="QuizSpark Logo" className="logo" />
+          {/* <img src="/quizSpark_icon.png" alt="QuizSpark Logo" className="logo" /> */}
           <h2>Quiz <span className="highlight">Spark</span></h2>
         </div>
 
