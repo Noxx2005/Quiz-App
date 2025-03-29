@@ -28,6 +28,7 @@ body {
   background: white;
   place-items: center;
   min-width: 320px;
+  max-height: 500vh;
   min-height: 100vh;
 }
 

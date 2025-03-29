@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import "./QuizForm.css";
 
 const QuizForm = () => {
@@ -12,14 +12,51 @@ const QuizForm = () => {
     correctOption: "",
   });
 
+  const [quizzes, setQuizzes] = useState([]);
+  const [isLoading, setIsLoading] = useState(true);
+
+  useEffect(() => {
+    const fetchQuizzes = async () => {
+      try {
+        const response = await fetch("http://localhost:5000/api/admin/get-all-quizzes");
+        if (!response.ok) {
+          throw new Error("Failed to fetch quizzes");
+        }
+        const data = await response.json();
+
+        const storedSubjects = sessionStorage.getItem("subjects");
+        const subjectArray = storedSubjects ? storedSubjects.split(",").map(s => s.trim()) : [];
+
+        const filteredQuizzes = data.filter((quiz) => subjectArray.includes(quiz.subject));
+        setQuizzes(filteredQuizzes);
+      } catch (error) {
+        console.error("Error fetching quizzes:", error);
+      } finally {
+        setIsLoading(false);
+      }
+    };
+
+    fetchQuizzes();
+  }, []);
+
   const handleChange = (e) => {
-    setQuizData({ ...quizData, [e.target.name]: e.target.value });
+    const { name, value } = e.target;
+    setQuizData((prevData) => ({
+      ...prevData,
+      [name]: name === "quizId" ? parseInt(value, 10) : value,
+    }));
   };
 
   const handleSubmit = async (e) => {
     e.preventDefault();
+    
+    if (!quizData.quizId) {
+      alert("Please select a quiz before submitting.");
+      return;
+    }
+
     try {
-      const response = await fetch("https://your-api-url.com/api/quizquestions", {
+      const response = await fetch("http://localhost:5000/api/Quiz", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify(quizData),
@@ -46,21 +83,86 @@ const QuizForm = () => {
   };
 
   return (
-        <div className="form-container1">
-        <div className="form-box">
-      <h2>Add a Quiz Question</h2>
-      <form onSubmit={handleSubmit}>
-        <input type="text" name="quizId" placeholder="Quiz ID" value={quizData.quizId} onChange={handleChange} required />
-        <input type="text" name="questionText" placeholder="Question" value={quizData.questionText} onChange={handleChange} required />
-        <input type="text" name="optionA" placeholder="Option A" value={quizData.optionA} onChange={handleChange} required />
-        <input type="text" name="optionB" placeholder="Option B" value={quizData.optionB} onChange={handleChange} required />
-        <input type="text" name="optionC" placeholder="Option C" value={quizData.optionC} onChange={handleChange} required />
-        <input type="text" name="optionD" placeholder="Option D" value={quizData.optionD} onChange={handleChange} required />
-        <input type="text" name="correctOption" placeholder="Correct Option (A, B, C, D)" value={quizData.correctOption} onChange={handleChange} required />
-        <button type="submit">Submit Question</button>
-      </form>
+    <div className="form-container1">
+      <div className="form-box">
+        <h2>Add a Quiz Question</h2>
+        {isLoading ? (
+          <p>Loading quizzes...</p>
+        ) : (
+          <form onSubmit={handleSubmit}>
+            <select 
+              name="quizId" 
+              value={quizData.quizId} 
+              onChange={handleChange} 
+              required
+              className="quiz-select"
+            >
+              <option value="">Select a Quiz</option>
+              {quizzes.map((quiz) => (
+                <option key={quiz.id} value={quiz.id}>
+                  {quiz.topic} ({quiz.subject})
+                </option>
+              ))}
+            </select>
+
+            <input 
+              type="text" 
+              name="questionText" 
+              placeholder="Question" 
+              value={quizData.questionText} 
+              onChange={handleChange} 
+              required 
+            />
+            <input 
+              type="text" 
+              name="optionA" 
+              placeholder="Option A" 
+              value={quizData.optionA} 
+              onChange={handleChange} 
+              required 
+            />
+            <input 
+              type="text" 
+              name="optionB" 
+              placeholder="Option B" 
+              value={quizData.optionB} 
+              onChange={handleChange} 
+              required 
+            />
+            <input 
+              type="text" 
+              name="optionC" 
+              placeholder="Option C" 
+              value={quizData.optionC} 
+              onChange={handleChange} 
+              required 
+            />
+            <input 
+              type="text" 
+              name="optionD" 
+              placeholder="Option D" 
+              value={quizData.optionD} 
+              onChange={handleChange} 
+              required 
+            />
+            <select
+              name="correctOption"
+              value={quizData.correctOption}
+              onChange={handleChange}
+              required
+            >
+              <option value="">Correct Option</option>
+              <option value="A">Option A</option>
+              <option value="B">Option B</option>
+              <option value="C">Option C</option>
+              <option value="D">Option D</option>
+            </select>
+            
+            <button type="submit">Submit Question</button>
+          </form>
+        )}
       </div>
-      </div>
+    </div>
   );
 };
 

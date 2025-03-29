@@ -303,6 +303,22 @@
     "ReturnTypes": []
   },
   {
+    "ContainingType": "Quiz.Controllers.UserController",
+    "Method": "GetUsers",
+    "RelativePath": "api/User/Users",
+    "HttpMethod": "GET",
+    "IsController": true,
+    "Order": 0,
+    "Parameters": [
+      {
+        "Name": "subject",
+        "Type": "System.String",
+        "IsRequired": false
+      }
+    ],
+    "ReturnTypes": []
+  },
+  {
     "ContainingType": "EFcore8.Controllers.WeatherForecastController",
     "Method": "Get",
     "RelativePath": "WeatherForecast",

@@ -1,0 +1,131 @@
+.quiz-card {
+  position: relative;
+  background: white;
+  border-radius: 8px;
+  padding: 15px;
+  box-shadow: 0px 4px 6px rgba(0, 0, 0, 0.1);
+  transition: transform 0.2s ease-in-out;
+  border-left: 5px solid #007bff;
+  margin: 10px; /* Added margin for spacing between cards */
+  width: calc(100% - 20px); /* Account for margin */
+  max-width: 400px; /* Maximum width for larger screens */
+}
+
+.quiz-card:hover {
+  transform: translateY(-3px);
+}
+
+.quiz-card h3 {
+  color: #007bff;
+  margin-bottom: 8px;
+  font-size: 1.2rem;
+}
+
+.quiz-card p {
+  margin: 8px 0;
+  font-size: 14px;
+  color: #333;
+}
+
+/* Button styles */
+.toggle-btn, .view-results-btn {
+  padding: 10px;
+  border: none;
+  border-radius: 5px;
+  cursor: pointer;
+  font-weight: bold;
+  width: 100%;
+  text-align: center;
+  margin-top: 10px;
+  transition: opacity 0.2s;
+}
+
+.toggle-btn:hover, .view-results-btn:hover {
+  opacity: 0.9;
+}
+
+.view-results-btn {
+  background-color: #2c3e50;
+  color: white;
+}
+
+.disable {
+  background-color: #dc3545;
+  color: white;
+}
+
+.enable {
+  background-color: #28a745;
+  color: white;
+}
+
+/* Popup styles */
+.popup-overlay {
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background: rgba(0, 0, 0, 0.5);
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  z-index: 1000;
+}
+
+.popup-content {
+  background: white;
+  padding: 20px;
+  border-radius: 8px;
+  box-shadow: 0px 4px 10px rgba(0, 0, 0, 0.2);
+  width: 90%;
+  max-width: 400px;
+  position: relative;
+}
+
+.close-btn {
+  background: none;
+  border: none;
+  font-size: 20px;
+  cursor: pointer;
+  color: #dc3545;
+  position: absolute;
+  top: 10px;
+  right: 10px;
+}
+
+.results-list {
+  list-style: none;
+  padding: 0;
+}
+
+.results-list li {
+  padding: 8px;
+  border-bottom: 1px solid #eee;
+}
+
+.no-results {
+  text-align: center;
+  color: #666;
+  padding: 20px 0;
+}
+
+/* Responsive adjustments */
+@media (max-width: 968px) {
+  .quiz-card {
+    width: calc(100% - 20px); /* Full width minus margin on mobile */
+    max-width: none; /* Remove max-width restriction on mobile */
+  }
+}
+
+@media (min-width: 969px) {
+  .quiz-card {
+    width: calc(50% - 30px); /* Two cards per row with spacing */
+  }
+}
+
+@media (min-width: 1200px) {
+  .quiz-card {
+    width: calc(33.333% - 30px); /* Three cards per row with spacing */
+  }
+}

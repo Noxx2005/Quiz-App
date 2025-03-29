@@ -35,7 +35,9 @@ namespace Quiz.Controllers
                 TopicLower = request.Topic.ToLower(),
                 QuestionAmount =request.QuizAmount,
                 CreatedAt = DateTime.UtcNow,
-                IsActive = request.IsActive
+                IsActive = request.IsActive,
+                Description = request.Description,
+                Time= request.Time
             };
 
             _context.Quizzes.Add(quiz);

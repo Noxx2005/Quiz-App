@@ -20,10 +20,11 @@ namespace Quiz.Repositories
 
         public async Task CreateAdminAsync(User admin)
         {
-            var sql = "INSERT INTO Users (FullName, Email, PasswordHash, UserType) VALUES (@p0, @p1, @p2, 'Admin')";
+            var sql = "INSERT INTO Users (FullName, Email, PasswordHash, UserType, Subjects, IsSuspended) VALUES (@p0, @p1, @p2, 'Admin', @p3, @p4)";
 
             await _context.Database.ExecuteSqlRawAsync(
-                sql, admin.FullName, admin.Email, admin.PasswordHash);
+                sql, admin.FullName, admin.Email, admin.PasswordHash, admin.Subjects, admin.IsSuspended);
         }
+
     }
 }

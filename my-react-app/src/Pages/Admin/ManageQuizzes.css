@@ -1,0 +1,25 @@
+.quiz-cards {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: center;
+  gap: 20px;
+  padding: 20px;
+  margin-left: 250px; /* Account for sidebar */
+  width: calc(100% - 250px);
+  box-sizing: border-box;
+}
+
+/* Mobile responsive adjustments */
+@media (max-width: 768px) {
+  .quiz-cards {
+    margin-left: 0;
+    width: 100%;
+    padding: 15px;
+    gap: 15px;
+  }
+  
+  .quiz-card {
+    margin: 0; /* Let the gap handle spacing */
+    width: 100%;
+  }
+}

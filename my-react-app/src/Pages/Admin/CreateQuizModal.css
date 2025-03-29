@@ -58,4 +58,21 @@
   .cancel-btn:hover {
     background-color: #c82333;
   }
+  .isactive {
+    display: flex;
+    align-items: center;
+    gap: 8px; /* Adds spacing between the checkbox and label */
+    font-size: 16px;
+    font-weight: bold;
+    color: black;
+    margin-top: 10px;
+  }
+  
+  /* Style the checkbox */
+  .isactive input[type="checkbox"] {
+    width: 18px;
+    height: 18px;
+    accent-color: #28a745; /* Green color for the active state */
+    cursor: pointer;
+  }
   

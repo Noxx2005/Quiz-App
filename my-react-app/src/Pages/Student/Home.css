@@ -102,7 +102,7 @@ background-color: none;
     } */
   
   /* Cards Wrapper */
-  .quiz-cards {
+  .quiz-card2s {
     display: flex;
     gap: 20px;
     overflow-x: hidden;

@@ -82,7 +82,8 @@ namespace Quiz.Services
                 UserId = user.Id,
                 Token = token,
                 FullName = user.FullName,
-                Role = user.UserType
+                Role = user.UserType,
+                subjects= user.Subjects
             };
         }
 
@@ -154,6 +155,7 @@ namespace Quiz.Services
                 FullName = registerDto.FullName,
                 Email = registerDto.Email,
                 PasswordHash = PasswordHasher.HashPassword(registerDto.Password),
+                Subjects=registerDto.Subjects,
                 UserType = "Admin"
             };
 

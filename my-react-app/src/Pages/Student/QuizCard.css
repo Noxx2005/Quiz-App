@@ -1,4 +1,4 @@
-.quiz-card {
+.quiz2-card {
     background: white;
     padding: 7px;
     display: flex;
@@ -13,12 +13,12 @@
     width: 200px;
   }
   
-  .quiz-card h3 {
+  .quiz2-card h3 {
     color: #4CAF50;
     /* margin-bottom: 10px; */
   }
   
-  .quiz-card p {
+  .quiz2-card p {
     font-size: 15px;
     font-weight: bold;
   }

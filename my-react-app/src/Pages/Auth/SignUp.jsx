@@ -150,6 +150,10 @@ const SignUp = () => {
   
         sessionStorage.setItem("token", data.token);
         sessionStorage.setItem("role", data.role);
+        sessionStorage.setItem("subjects", data.subjects);
+        sessionStorage.setItem("fullName", data.fullName);
+        sessionStorage.setItem("email", data.email);
+        sessionStorage.setItem("userId", data.userId);
         showToast("Login Successful!", "success");
   
         setTimeout(() => {

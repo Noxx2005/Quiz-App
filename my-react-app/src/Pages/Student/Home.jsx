@@ -96,7 +96,7 @@ const Home = () => {
               <FontAwesomeIcon icon={faChevronLeft} />
             </button>
 
-            <div className="quiz-cards">
+            <div className="quiz2-cards">
               {filteredQuizzes.slice(visibleIndex, visibleIndex + 4).map((quiz) => (
                 <QuizCard key={quiz.id} quiz={quiz} onClick={() => handleQuizClick(quiz)} />
               ))}

@@ -3,12 +3,20 @@
   "WorkspaceRootPath": "C:\\Users\\Bot Peter\\Documents\\Quiz-App\\EFcore8 - Quiz\\",
   "Documents": [
     {
-      "AbsoluteMoniker": "D:0:0:{71FE4868-F3EB-46C3-9F8C-E773ECB392C7}|Quiz.csproj|c:\\users\\bot peter\\documents\\quiz-app\\efcore8 - quiz\\controllers\\studentcontroller.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
-      "RelativeMoniker": "D:0:0:{71FE4868-F3EB-46C3-9F8C-E773ECB392C7}|Quiz.csproj|solutionrelative:controllers\\studentcontroller.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+      "AbsoluteMoniker": "D:0:0:{71FE4868-F3EB-46C3-9F8C-E773ECB392C7}|Quiz.csproj|c:\\users\\bot peter\\documents\\quiz-app\\efcore8 - quiz\\controllers\\quizcontroller.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{71FE4868-F3EB-46C3-9F8C-E773ECB392C7}|Quiz.csproj|solutionrelative:controllers\\quizcontroller.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{71FE4868-F3EB-46C3-9F8C-E773ECB392C7}|Quiz.csproj|c:\\users\\bot peter\\documents\\quiz-app\\efcore8 - quiz\\models\\quizquestion.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{71FE4868-F3EB-46C3-9F8C-E773ECB392C7}|Quiz.csproj|solutionrelative:models\\quizquestion.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
     },
     {
       "AbsoluteMoniker": "D:0:0:{71FE4868-F3EB-46C3-9F8C-E773ECB392C7}|Quiz.csproj|c:\\users\\bot peter\\documents\\quiz-app\\efcore8 - quiz\\controllers\\admincontroller.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
       "RelativeMoniker": "D:0:0:{71FE4868-F3EB-46C3-9F8C-E773ECB392C7}|Quiz.csproj|solutionrelative:controllers\\admincontroller.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{71FE4868-F3EB-46C3-9F8C-E773ECB392C7}|Quiz.csproj|c:\\users\\bot peter\\documents\\quiz-app\\efcore8 - quiz\\repositories\\adminrepo.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{71FE4868-F3EB-46C3-9F8C-E773ECB392C7}|Quiz.csproj|solutionrelative:repositories\\adminrepo.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
     }
   ],
   "DocumentGroupContainers": [
@@ -18,7 +26,7 @@
       "DocumentGroups": [
         {
           "DockedWidth": 200,
-          "SelectedChildIndex": 5,
+          "SelectedChildIndex": 6,
           "Children": [
             {
               "$type": "Bookmark",
@@ -42,28 +50,54 @@
             },
             {
               "$type": "Document",
-              "DocumentIndex": 0,
-              "Title": "StudentController.cs",
-              "DocumentMoniker": "C:\\Users\\Bot Peter\\Documents\\Quiz-App\\EFcore8 - Quiz\\Controllers\\StudentController.cs",
-              "RelativeDocumentMoniker": "Controllers\\StudentController.cs",
-              "ToolTip": "C:\\Users\\Bot Peter\\Documents\\Quiz-App\\EFcore8 - Quiz\\Controllers\\StudentController.cs",
-              "RelativeToolTip": "Controllers\\StudentController.cs",
-              "ViewState": "AgIAAKgAAAAAAAAAAAAUwLUAAAAAAAAAAAAAAA==",
+              "DocumentIndex": 1,
+              "Title": "QuizQuestion.cs",
+              "DocumentMoniker": "C:\\Users\\Bot Peter\\Documents\\Quiz-App\\EFcore8 - Quiz\\Models\\QuizQuestion.cs",
+              "RelativeDocumentMoniker": "Models\\QuizQuestion.cs",
+              "ToolTip": "C:\\Users\\Bot Peter\\Documents\\Quiz-App\\EFcore8 - Quiz\\Models\\QuizQuestion.cs",
+              "RelativeToolTip": "Models\\QuizQuestion.cs",
+              "ViewState": "AgIAAAgAAAAAAAAAAAAAABMAAAAtAAAAAAAAAA==",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
-              "WhenOpened": "2025-03-25T23:19:55.77Z",
+              "WhenOpened": "2025-03-29T16:41:01.972Z",
               "EditorCaption": ""
             },
             {
               "$type": "Document",
-              "DocumentIndex": 1,
+              "DocumentIndex": 0,
+              "Title": "QuizController.cs",
+              "DocumentMoniker": "C:\\Users\\Bot Peter\\Documents\\Quiz-App\\EFcore8 - Quiz\\Controllers\\QuizController.cs",
+              "RelativeDocumentMoniker": "Controllers\\QuizController.cs",
+              "ToolTip": "C:\\Users\\Bot Peter\\Documents\\Quiz-App\\EFcore8 - Quiz\\Controllers\\QuizController.cs",
+              "RelativeToolTip": "Controllers\\QuizController.cs",
+              "ViewState": "AgIAABMAAAAAAAAAAAAAAC4AAABwAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2025-03-29T16:32:48.97Z",
+              "EditorCaption": ""
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 2,
               "Title": "AdminController.cs",
               "DocumentMoniker": "C:\\Users\\Bot Peter\\Documents\\Quiz-App\\EFcore8 - Quiz\\Controllers\\AdminController.cs",
               "RelativeDocumentMoniker": "Controllers\\AdminController.cs",
               "ToolTip": "C:\\Users\\Bot Peter\\Documents\\Quiz-App\\EFcore8 - Quiz\\Controllers\\AdminController.cs",
               "RelativeToolTip": "Controllers\\AdminController.cs",
-              "ViewState": "AgIAAEIAAAAAAAAAAAAQwFUAAAAAAAAAAAAAAA==",
+              "ViewState": "AgIAAAgAAAAAAAAAAAAqwBYAAABJAAAAAAAAAA==",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
-              "WhenOpened": "2025-03-25T23:18:13.831Z",
+              "WhenOpened": "2025-03-29T15:44:25.268Z",
+              "EditorCaption": ""
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 3,
+              "Title": "AdminRepo.cs",
+              "DocumentMoniker": "C:\\Users\\Bot Peter\\Documents\\Quiz-App\\EFcore8 - Quiz\\Repositories\\AdminRepo.cs",
+              "RelativeDocumentMoniker": "Repositories\\AdminRepo.cs",
+              "ToolTip": "C:\\Users\\Bot Peter\\Documents\\Quiz-App\\EFcore8 - Quiz\\Repositories\\AdminRepo.cs",
+              "RelativeToolTip": "Repositories\\AdminRepo.cs",
+              "ViewState": "AgIAAAkAAAAAAAAAAAA9wBsAAAAAAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2025-03-29T12:24:01.632Z",
               "EditorCaption": ""
             }
           ]

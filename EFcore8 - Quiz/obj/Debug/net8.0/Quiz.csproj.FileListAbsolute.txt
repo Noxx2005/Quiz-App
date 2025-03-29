@@ -347,3 +347,4 @@ C:\Users\Bot Peter\Documents\Quiz-App\EFCore8 - Quiz\obj\Debug\net8.0\refint\Qui
 C:\Users\Bot Peter\Documents\Quiz-App\EFCore8 - Quiz\obj\Debug\net8.0\Quiz.pdb
 C:\Users\Bot Peter\Documents\Quiz-App\EFCore8 - Quiz\obj\Debug\net8.0\Quiz.genruntimeconfig.cache
 C:\Users\Bot Peter\Documents\Quiz-App\EFCore8 - Quiz\obj\Debug\net8.0\ref\Quiz.dll
+C:\Users\Bot Peter\Documents\Quiz-App\EFcore8 - Quiz\bin\Debug\net8.0\Newtonsoft.Json.dll

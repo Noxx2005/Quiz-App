@@ -2,6 +2,7 @@
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
+using Newtonsoft.Json;
 using Quiz.Data;
 using Quiz.DTOs;
 using Quiz.Models;
@@ -24,31 +25,53 @@ namespace Quiz.Controllers
         [HttpPost]
         public async Task<IActionResult> AddQuizQuestion([FromBody] QuizQuestionDTO quizQuestionDto)
         {
-            // ✅ Check if QuizId exists in Quizzes table before adding the question
-            var existingQuiz = await _context.Quizzes.FindAsync(quizQuestionDto.QuizId);
-            if (existingQuiz == null)
+            try
             {
-                return BadRequest("Quiz does not exist.");
+                // 🔍 Log incoming data
+                Console.WriteLine(JsonConvert.SerializeObject(quizQuestionDto));
+
+                // Check if QuizId exists
+                var existingQuiz = await _context.Quizzes.FindAsync(quizQuestionDto.QuizId);
+                if (existingQuiz == null)
+                {
+                    return BadRequest("Quiz does not exist.");
+                }
+
+                // Get the number of questions already added for this QuizId
+                int currentQuestionCount = await _context.QuizQuestions
+                    .CountAsync(q => q.QuizId == quizQuestionDto.QuizId);
+
+                // Ensure we do not exceed the allowed number of questions
+                if (currentQuestionCount >= existingQuiz.QuestionAmount)
+                {
+                    return BadRequest($"Cannot add more questions. Maximum allowed: {existingQuiz.QuestionAmount}");
+                }
+
+                // Create new QuizQuestion object
+                var newQuestion = new QuizQuestion
+                {
+                    QuizId = quizQuestionDto.QuizId,
+                    QuestionText = quizQuestionDto.QuestionText,
+                    OptionA = quizQuestionDto.OptionA,
+                    OptionB = quizQuestionDto.OptionB,
+                    OptionC = quizQuestionDto.OptionC,
+                    OptionD = quizQuestionDto.OptionD,
+                    CorrectOption = quizQuestionDto.CorrectOption // Ensure this is within allowed constraints
+                };
+
+                // Add and save
+                _context.QuizQuestions.Add(newQuestion);
+                await _context.SaveChangesAsync();
+
+                return Ok(new { message = "Question added successfully!" });
             }
-
-            // ✅ Create a new QuizQuestion object
-            var newQuestion = new QuizQuestion
+            catch (Exception ex)
             {
-                QuizId = quizQuestionDto.QuizId,
-                QuestionText = quizQuestionDto.QuestionText,
-                OptionA = quizQuestionDto.OptionA,
-                OptionB = quizQuestionDto.OptionB,
-                OptionC = quizQuestionDto.OptionC,
-                OptionD = quizQuestionDto.OptionD,
-                CorrectOption = quizQuestionDto.CorrectOption
-            };
-
-            // ✅ Add to the database
-            _context.QuizQuestions.Add(newQuestion);
-            await _context.SaveChangesAsync();
-
-            return Ok(new { message = "Question added successfully!" });
+                return BadRequest($"Error: {ex.Message}");
+            }
         }
+
+
 
         [HttpGet("GetQuizQuestions/{quizId}")]
         public async Task<IActionResult> GetQuizQuestions(int quizId)

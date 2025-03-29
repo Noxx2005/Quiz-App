@@ -22,11 +22,11 @@ namespace Quiz.Controllers
             _context = context;
         }
 
-        // ✅ Get quizzes based on user's subjects
+        // Get quizzes based on user's subjects
         [HttpGet("get-user-quizzes/{userId}")]
         public async Task<IActionResult> GetUserQuizzes(int userId)
         {
-            var user = await _context.Users.FindAsync(userId); // Update to Users
+            var user = await _context.Users.FindAsync(userId);
 
             if (user == null)
                 return NotFound(new { message = "User not found." });
@@ -86,7 +86,7 @@ namespace Quiz.Controllers
             return Ok(new { message = "Subjects updated successfully.", updatedSubjects = user.Subjects });
         }
 
-        // ✅ Get user profile
+        // Get user profile
         [HttpGet("profile")]
         public async Task<IActionResult> GetUserProfile(string email)
         {
@@ -105,7 +105,31 @@ namespace Quiz.Controllers
             return user != null ? Ok(user) : NotFound(new { message = "User not found." });
         }
 
-        // ✅ Get quiz history for user
+        [HttpGet("Users")]
+        public async Task<IActionResult> GetUsers(string subject)
+        {
+            if (string.IsNullOrWhiteSpace(subject))
+                return BadRequest(new { message = "Subject is required." });
+
+            var users = await _context.Users
+                .Where(u => u.UserType == "Student" && EF.Functions.Like(u.Subjects, $"%{subject}%")) // Matches subject in comma-separated values
+                .Select(u => new
+                {
+                    u.Id,
+                    u.FullName,
+                    u.Email,
+                    u.IsSuspended
+                })
+                .ToListAsync();
+
+            if (!users.Any())
+                return NotFound(new { message = "No users found for the given subject." });
+
+            return Ok(users);
+        }
+
+
+        // Get quiz history for user
         [HttpGet("history/{userId}")]
         public async Task<IActionResult> GetQuizHistory(int userId)
         {
@@ -130,7 +154,7 @@ namespace Quiz.Controllers
             return Ok(quizHistory);
         }
 
-        // ✅ Submit quiz result using a stored procedure
+        // Submit quiz result using a stored procedure
         [HttpPost("submit-quiz")]
         public async Task<IActionResult> SubmitQuizResult([FromBody] StudentQuizResultDto quizResultDto)
         {
@@ -159,7 +183,7 @@ namespace Quiz.Controllers
             }
         }
 
-        // ✅ Suspend or reinstate a user
+        // Suspend or reinstate a user
         [HttpPut("suspend-user/{userId}")]
         public async Task<IActionResult> SuspendUser(int userId)
         {
