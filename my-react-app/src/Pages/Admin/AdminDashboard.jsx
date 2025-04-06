@@ -17,6 +17,11 @@ const AdminDashboard = () => {
     return () => window.removeEventListener('resize', handleResize);
   }, []);
 
+  const handleQuizCreationSuccess = () => {
+    // Reload the page after quiz creation is successful
+    window.location.reload();
+  };
+
   return (
     <div className="admin-dashboard">
       <Sidebar />
@@ -40,6 +45,7 @@ const AdminDashboard = () => {
           <CreateQuizModal 
             onClose={() => setIsModalOpen(false)} 
             isMobile={isMobile}
+            onQuizCreated={handleQuizCreationSuccess} // Pass the reload function
           />
         )}
       </div>

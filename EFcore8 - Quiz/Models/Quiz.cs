@@ -25,6 +25,10 @@ public partial class Quiz
 
     public int? QuestionAmount { get; set; }
 
+    public int? AdminId { get; set; }
+
+    public virtual User? Admin { get; set; }
+
     public virtual ICollection<QuizQuestion> QuizQuestions { get; set; } = new List<QuizQuestion>();
 
     public virtual ICollection<StudentQuizResult> StudentQuizResults { get; set; } = new List<StudentQuizResult>();

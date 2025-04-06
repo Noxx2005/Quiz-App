@@ -1,7 +1,7 @@
 import React, { useState } from "react";
 import "./CreateQuizModal.css";
 
-const CreateQuizModal = ({ onClose }) => {
+const CreateQuizModal = ({ onClose, onQuizCreated }) => {
   const [formData, setFormData] = useState({
     subject: "",
     topic: "",
@@ -21,13 +21,15 @@ const CreateQuizModal = ({ onClose }) => {
 
   const handleSubmit = async (e) => {
     e.preventDefault();
-
+  
     const token = sessionStorage.getItem("token");
-    if (!token) {
-      console.error("No token found in session storage");
+    const userId = sessionStorage.getItem("userId");  // Get admin's userId from session storage
+  
+    if (!token || !userId) {
+      console.error("No token or adminId found in session storage");
       return;
     }
-
+  
     const payload = {
       subject: formData.subject,
       topic: formData.topic,
@@ -35,8 +37,9 @@ const CreateQuizModal = ({ onClose }) => {
       time: parseInt(formData.time, 10), // Ensure time is a number
       quizAmount: parseInt(formData.quizAmount, 10), // Ensure quizAmount is a number
       isActive: formData.isActive,
+      adminId: userId,  // Add adminId to the payload
     };
-
+  
     try {
       const response = await fetch("http://localhost:5000/api/admin/create-quiz", {
         method: "POST",
@@ -46,10 +49,11 @@ const CreateQuizModal = ({ onClose }) => {
         },
         body: JSON.stringify(payload),
       });
-
+  
       if (response.ok) {
         alert("Quiz created successfully!");
-        onClose();
+        onQuizCreated();  // Trigger page reload via parent callback
+        onClose();  // Close the modal
       } else {
         const errorData = await response.json();
         alert(`Failed to create quiz: ${errorData.message}`);
@@ -59,6 +63,7 @@ const CreateQuizModal = ({ onClose }) => {
       alert("An error occurred while creating the quiz.");
     }
   };
+  
 
   return (
     <div className="modal-overlay">

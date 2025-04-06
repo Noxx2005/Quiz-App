@@ -8,17 +8,6 @@ import mage3 from "../../assets/qsd3.jpg";
 
 const images = [mage1, mage2, mage3];
 
-const scienceSubjects = [
-  { value: "Physics", label: "Physics" },
-  { value: "Chemistry", label: "Chemistry" },
-  { value: "Biology", label: "Biology" },
-  { value: "Mathematics", label: "Mathematics" },
-  { value: "Computer Science", label: "Computer Science" },
-  { value: "Environmental Science", label: "Environmental Science" },
-  { value: "Statistics", label: "Statistics" },
-  { value: "Astronomy", label: "Astronomy" },
-];
-
 const SignUp = () => {
   const [currentSlide, setCurrentSlide] = useState(0);
   const [isSignUp, setIsSignUp] = useState(false);
@@ -27,6 +16,7 @@ const SignUp = () => {
   const [toastType, setToastType] = useState("");
   const [isAdmin, setIsAdmin] = useState(false);
   const navigate = useNavigate();
+  const [scienceSubjects, setScienceSubjects] = useState([]);
 
   const [formData, setFormData] = useState({
     fullName: "",
@@ -42,6 +32,38 @@ const SignUp = () => {
     }, 3000);
     return () => clearInterval(interval);
   }, []);
+
+  // Fetch quiz subjects from the API
+  useEffect(() => {
+    const fetchSubjects = async () => {
+      try {
+        const response = await fetch("http://localhost:5000/api/admin/get-all-quizzes");
+        const data = await response.json();
+        
+        if (response.ok) {
+          const subjects = data.map((quiz) => quiz.subject);
+          const uniqueSubjects = [...new Set(subjects)].map((subject) => ({
+            value: subject,
+            label: subject,
+          }));
+          setScienceSubjects(uniqueSubjects);
+        } else {
+          showToast("Failed to load subjects.", "error");
+        }
+      } catch (error) {
+        showToast("Error fetching subjects.", "error");
+      }
+    };
+
+    fetchSubjects();
+  }, []);
+
+  // Disable/Enable subject dropdown based on admin checkbox
+  useEffect(() => {
+    if (isAdmin) {
+      setFormData((prevData) => ({ ...prevData, selectedSubjects: [] })); // Clear subjects if admin is selected
+    }
+  }, [isAdmin]);
 
   const showToast = (message, type) => {
     setToastMessage(message);
@@ -90,7 +112,7 @@ const SignUp = () => {
         return;
       }
   
-      if (selectedSubjects.length < 5) {
+      if (selectedSubjects.length < 5 && !isAdmin) {
         showToast("Please select at least 5 subjects!", "error");
         return;
       }
@@ -207,13 +229,15 @@ const SignUp = () => {
                 Register as Admin
               </label>
               <label>Select Subjects:</label>
-              <Select   options={scienceSubjects}
-  isMulti
-  value={formData.selectedSubjects}
-  onChange={handleSubjectChange}
-  className="subject-dropdown"
-  isDisabled={inputsDisabled}
-  menuPlacement="auto" />
+              <Select   
+                options={scienceSubjects}
+                isMulti
+                value={formData.selectedSubjects}
+                onChange={handleSubjectChange}
+                className="subject-dropdown"
+                isDisabled={isAdmin || inputsDisabled}
+                menuPlacement="auto"
+              />
             </>
           )}
 

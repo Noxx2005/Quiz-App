@@ -7,51 +7,84 @@ const Student = () => {
   const [students, setStudents] = useState([]);
   const [searchQuery, setSearchQuery] = useState("");
   const [isMobile, setIsMobile] = useState(window.innerWidth <= 768);
+  const [currentPage, setCurrentPage] = useState(1);
+  const studentsPerPage = 6;
+  const [subjects, setSubjects] = useState([]);
 
   useEffect(() => {
     const handleResize = () => {
       setIsMobile(window.innerWidth <= 768);
     };
 
-    window.addEventListener('resize', handleResize);
-    return () => window.removeEventListener('resize', handleResize);
+    window.addEventListener("resize", handleResize);
+    return () => window.removeEventListener("resize", handleResize);
   }, []);
 
   useEffect(() => {
-    const fetchStudents = async () => {
+    const fetchQuizzes = async () => {
       try {
-        const subjectsData = sessionStorage.getItem("subjects");
-        if (!subjectsData) {
-          console.error("No subjects found in session storage");
-          return;
-        }
-
-        const subjects = subjectsData
-          .split(",")
-          .map((subject) => subject.trim())
-          .filter((subject) => subject);
-
-        if (subjects.length === 0) {
-          console.warn("No valid subjects found");
-          return;
-        }
-
         const token = sessionStorage.getItem("token");
-        const studentPromises = subjects.map((subject) =>
+        const userId = sessionStorage.getItem("userId");
+
+        if (!token || !userId) {
+          console.error("No token or userId found in session storage");
+          return;
+        }
+
+        const response = await fetch("http://localhost:5000/api/admin/get-all-quizzes", {
+          headers: { Authorization: `Bearer ${token}` },
+        });
+
+        if (!response.ok) {
+          console.error("Failed to fetch quizzes");
+          return;
+        }
+
+        const allQuizzes = await response.json();
+
+        // Log quizzes fetched
+        console.log("All Quizzes Fetched:", allQuizzes);
+
+        // Filter quizzes by adminId and userId
+        const filteredQuizzes = allQuizzes.filter(
+          (quiz) => quiz.adminId === parseInt(userId, 10)
+        );
+
+        // Log filtered quizzes
+        console.log("Filtered Quizzes:", filteredQuizzes);
+
+        // Extract subjects from the quizzes
+        const quizSubjects = [...new Set(filteredQuizzes.map((quiz) => quiz.subject))];
+
+        // Log extracted subjects
+        console.log("Extracted Subjects:", quizSubjects);
+
+        setSubjects(quizSubjects);
+
+        // Fetch students based on subjects
+        fetchStudents(quizSubjects);
+      } catch (error) {
+        console.error("Error fetching quizzes:", error);
+      }
+    };
+
+    const fetchStudents = async (quizSubjects) => {
+      try {
+        const token = sessionStorage.getItem("token");
+
+        const studentPromises = quizSubjects.map((subject) =>
           fetch(`http://localhost:5000/api/User/Users?subject=${encodeURIComponent(subject)}`, {
-            headers: {
-              Authorization: `Bearer ${token}`
-            }
+            headers: { Authorization: `Bearer ${token}` },
           })
             .then((res) => res.json())
-            .catch((error) => {
-              console.error(`Error fetching students for ${subject}:`, error);
-              return [];
-            })
+            .catch(() => [])
         );
 
         const results = await Promise.all(studentPromises);
         const allStudents = results.flat();
+
+        // Log all fetched students
+        console.log("All Students Fetched:", allStudents);
 
         const uniqueStudents = Array.from(
           new Map(allStudents.map((student) => [student.id, student])).values()
@@ -63,7 +96,7 @@ const Student = () => {
       }
     };
 
-    fetchStudents();
+    fetchQuizzes();
   }, []);
 
   const filteredStudents = students.filter((student) => {
@@ -74,6 +107,17 @@ const Student = () => {
     );
   });
 
+  // Pagination
+  const totalPages = Math.ceil(filteredStudents.length / studentsPerPage);
+  const indexOfLast = currentPage * studentsPerPage;
+  const indexOfFirst = indexOfLast - studentsPerPage;
+  const currentStudents = filteredStudents.slice(indexOfFirst, indexOfLast);
+
+  const handlePageChange = (pageNumber) => {
+    setCurrentPage(pageNumber);
+    window.scrollTo({ top: 0, behavior: "smooth" });
+  };
+
   return (
     <div className="student-management-container">
       <Sidebar />
@@ -82,12 +126,16 @@ const Student = () => {
           type="text"
           placeholder="Search by name or email..."
           value={searchQuery}
-          onChange={(e) => setSearchQuery(e.target.value)}
+          onChange={(e) => {
+            setSearchQuery(e.target.value);
+            setCurrentPage(1);
+          }}
           className="search-input"
         />
+
         <div className="student-cards-grid">
-          {filteredStudents.length > 0 ? (
-            filteredStudents.map((student) => (
+          {currentStudents.length > 0 ? (
+            currentStudents.map((student) => (
               <ProfileCard key={student.id} student={student} />
             ))
           ) : (
@@ -96,6 +144,22 @@ const Student = () => {
             </div>
           )}
         </div>
+
+        {filteredStudents.length > studentsPerPage && (
+          <div className="pagination-controls">
+            {Array.from({ length: totalPages }, (_, index) => (
+              <button
+                key={index + 1}
+                onClick={() => handlePageChange(index + 1)}
+                className={`pagination-btn ${
+                  currentPage === index + 1 ? "active" : ""
+                }`}
+              >
+                {index + 1}
+              </button>
+            ))}
+          </div>
+        )}
       </div>
     </div>
   );

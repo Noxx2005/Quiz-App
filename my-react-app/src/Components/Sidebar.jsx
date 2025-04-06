@@ -41,6 +41,7 @@ const Sidebar = () => {
           <li onClick={() => navigateTo("/DashBoard")}>Home</li>
           <li onClick={() => navigateTo("/Manage")}>Manage Quiz</li>
           <li onClick={() => navigateTo("/Student")}>Manage Students</li>
+          <li onClick={() => navigateTo("/forgot-password")}>Forgot Password</li>
         </ul>
 
         {/* Logout Button */}

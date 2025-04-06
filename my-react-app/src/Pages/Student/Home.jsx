@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect } from "react"; 
 import "./Home.css";
 import QuizCard from "./QuizCard";
 import { useNavigate } from "react-router-dom"; 
@@ -8,10 +8,12 @@ import { faChevronLeft, faChevronRight } from "@fortawesome/free-solid-svg-icons
 import Navbar from "../../Components/Navbar";
 import { jwtDecode } from "jwt-decode";
 import ProfileIcon from "./ProfileIcon";
+
 const Home = () => {
   const [quizzes, setQuizzes] = useState([]);
   const [searchQuery, setSearchQuery] = useState("");
   const [visibleIndex, setVisibleIndex] = useState(0);
+  const [popupMessage, setPopupMessage] = useState(null);
   const navigate = useNavigate();
 
   useEffect(() => {
@@ -74,18 +76,46 @@ const Home = () => {
     }
   };
 
-  const handleQuizClick = (quiz) => {
-    navigate("/quiz", { state: { quizId: quiz.id, time: quiz.time } });
+  const handleQuizClick = async (quiz) => {
+    try {
+      const token = sessionStorage.getItem("token");
+      const response = await fetch(`http://localhost:5000/api/Quiz/GetQuizQuestions/${quiz.id}`, {
+        method: "GET",
+        headers: { "Authorization": `Bearer ${token}` },
+      });
+
+      if (!response.ok) {
+        throw new Error(`Failed to fetch questions: ${response.status}`);
+      }
+
+      const data = await response.json();
+      
+      if (data.message === "No questions found for this quiz.") {
+        setPopupMessage("No questions found for this quiz");
+        setTimeout(() => {
+          setPopupMessage(null);
+        }, 5000);
+        return;
+      }
+
+      navigate("/quiz", { state: { quizId: quiz.id, time: quiz.time } });
+    } catch (error) {
+      console.error("Error checking quiz questions:", error);
+      setPopupMessage("No available quiz questions");
+      setTimeout(() => {
+        setPopupMessage(null);
+      }, 5000);
+    }
   };
 
   return (
     <div>
       <Navbar />
       <div className="mobile-warning">
-  <h2>Please Open on a Laptop or Desktop</h2>
-  <p>This application is designed for larger screens.</p>
-  <p>For the best experience, please access it from a computer.</p>
-</div>
+        <h2>Please Open on a Laptop or Desktop</h2>
+        <p>This application is designed for larger screens.</p>
+        <p>For the best experience, please access it from a computer.</p>
+      </div>
       <div className="home-container">
         
         {/* Top Section */}
@@ -115,6 +145,15 @@ const Home = () => {
         </div>
       </div>
       <ProfileIcon />
+      
+      {/* Popup for showing messages */}
+      {popupMessage && (
+        <div className="quiz-popup">
+          <div className="popup-content">
+            <p>{popupMessage}</p>
+          </div>
+        </div>
+      )}
     </div>
   );
 };

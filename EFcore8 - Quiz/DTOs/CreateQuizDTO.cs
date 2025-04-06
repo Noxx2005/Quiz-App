@@ -9,6 +9,7 @@
         public string Description { get; set; } = null!;
 
         public int? Time { get; set; }
+        public int AdminId { get; set; }    
 
         public int? QuizAmount { get; set; }
     }

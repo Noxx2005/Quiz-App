@@ -19,5 +19,7 @@ public partial class User
 
     public bool? IsSuspended { get; set; }
 
+    public virtual ICollection<Quiz> Quizzes { get; set; } = new List<Quiz>();
+
     public virtual ICollection<StudentQuizResult> StudentQuizResults { get; set; } = new List<StudentQuizResult>();
 }

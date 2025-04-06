@@ -37,7 +37,8 @@ namespace Quiz.Controllers
                 CreatedAt = DateTime.UtcNow,
                 IsActive = request.IsActive,
                 Description = request.Description,
-                Time= request.Time
+                AdminId = request.AdminId,
+                Time = request.Time
             };
 
             _context.Quizzes.Add(quiz);
@@ -125,7 +126,8 @@ namespace Quiz.Controllers
                     q.Topic,
                     q.Description,
                     q.CreatedAt,
-                    q.IsActive
+                    q.IsActive,
+                    q.AdminId
                 })
                 .ToListAsync();
 

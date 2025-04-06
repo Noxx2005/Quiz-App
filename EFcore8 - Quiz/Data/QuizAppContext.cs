@@ -63,18 +63,18 @@ public partial class QuizAppContext : DbContext
             entity.Property(e => e.TopicLower)
                 .HasMaxLength(100)
                 .HasComputedColumnSql("(lower([Topic]))", true);
+
+            entity.HasOne(d => d.Admin).WithMany(p => p.Quizzes)
+                .HasForeignKey(d => d.AdminId)
+                .OnDelete(DeleteBehavior.Cascade)
+                .HasConstraintName("FK_Quizzes_AdminId");
         });
 
         modelBuilder.Entity<QuizQuestion>(entity =>
         {
             entity.HasKey(e => e.Id).HasName("PK__QuizQues__3214EC071CD82382");
 
-            entity.ToTable(tb => tb.HasTrigger("trg_LimitQuizQuestions"));
-
-            entity.Property(e => e.CorrectOption)
-                .HasMaxLength(1)
-                .IsUnicode(false)
-                .IsFixedLength();
+            entity.Property(e => e.CorrectOption).HasMaxLength(10);
             entity.Property(e => e.OptionA).HasMaxLength(255);
             entity.Property(e => e.OptionB).HasMaxLength(255);
             entity.Property(e => e.OptionC).HasMaxLength(255);
@@ -82,7 +82,6 @@ public partial class QuizAppContext : DbContext
 
             entity.HasOne(d => d.Quiz).WithMany(p => p.QuizQuestions)
                 .HasForeignKey(d => d.QuizId)
-                .OnDelete(DeleteBehavior.Cascade)
                 .HasConstraintName("FK_QuizQuestions_Quiz");
         });
 

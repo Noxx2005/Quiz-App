@@ -24,10 +24,17 @@ const QuizForm = () => {
         }
         const data = await response.json();
 
-        const storedSubjects = sessionStorage.getItem("subjects");
-        const subjectArray = storedSubjects ? storedSubjects.split(",").map(s => s.trim()) : [];
+        // Get userId from session storage
+        const userId = sessionStorage.getItem("userId");
 
-        const filteredQuizzes = data.filter((quiz) => subjectArray.includes(quiz.subject));
+        if (!userId) {
+          console.error("No userId found in session storage");
+          return;
+        }
+
+        // Filter quizzes based on the adminId matching the userId from session storage
+        const filteredQuizzes = data.filter((quiz) => quiz.adminId === Number(userId));
+        
         setQuizzes(filteredQuizzes);
       } catch (error) {
         console.error("Error fetching quizzes:", error);
@@ -98,11 +105,15 @@ const QuizForm = () => {
               className="quiz-select"
             >
               <option value="">Select a Quiz</option>
-              {quizzes.map((quiz) => (
-                <option key={quiz.id} value={quiz.id}>
-                  {quiz.topic} ({quiz.subject})
-                </option>
-              ))}
+              {quizzes.length > 0 ? (
+                quizzes.map((quiz) => (
+                  <option key={quiz.id} value={quiz.id}>
+                    {quiz.topic} ({quiz.subject})
+                  </option>
+                ))
+              ) : (
+                <option disabled>No quizzes available</option>
+              )}
             </select>
 
             <input 

@@ -11,6 +11,8 @@ import ProfileCard from "./Pages/Admin/ProfileCard";
 import QuizCard from "./Pages/Admin/QuizCard";
 import ManageQuizzes from "./Pages/Admin/ManageQuizzes";
 import Student from "./Pages/Admin/ManageStudents";
+import ResetPasswordPage from "./Pages/Auth/ResetPassword";
+import ForgotPassword from "./Pages/Auth/ForgotPassword";
 import './App.css';
 
 function App() {
@@ -19,16 +21,18 @@ function App() {
       {/* <Navbar /> */}
       {/* <ProfileIcon /> */}
       {/* <QuizCard /> */}
-      {/* <ProfileCard/> */}
+      {/* <ProfileCard /> */}
       <Routes>
-        <Route path="/Quiz" element={<Quiz/>} />
+        <Route path="/Quiz" element={<Quiz />} />
         <Route path="/home" element={<Home />} />
         <Route path="/" element={<Home />} />
         <Route path="/Manage" element={<ManageQuizzes />} />
         <Route path="/Student" element={<Student />} />
         <Route path="/signup" element={<SignUp />} />
         <Route path="/Profile" element={<StudentDashboard />} />
-        <Route path="/Dashboard" element={<AdminDashboard/>} />
+        <Route path="/Dashboard" element={<AdminDashboard />} />
+        <Route path="/forgot-password" element={<ForgotPassword />} />
+        <Route path="/reset-password" element={<ResetPasswordPage />} />
       </Routes>
     </Router>
   );
