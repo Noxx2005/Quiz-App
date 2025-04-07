@@ -33,13 +33,12 @@ const SignUp = () => {
     return () => clearInterval(interval);
   }, []);
 
-  // Fetch quiz subjects from the API
   useEffect(() => {
     const fetchSubjects = async () => {
       try {
         const response = await fetch("http://localhost:5000/api/admin/get-all-quizzes");
         const data = await response.json();
-        
+
         if (response.ok) {
           const subjects = data.map((quiz) => quiz.subject);
           const uniqueSubjects = [...new Set(subjects)].map((subject) => ({
@@ -48,7 +47,7 @@ const SignUp = () => {
           }));
           setScienceSubjects(uniqueSubjects);
         } else {
-          showToast("Failed to load subjects.", "error");
+          showToast("No Subjects Available to Pick.", "error");
         }
       } catch (error) {
         showToast("Error fetching subjects.", "error");
@@ -58,10 +57,9 @@ const SignUp = () => {
     fetchSubjects();
   }, []);
 
-  // Disable/Enable subject dropdown based on admin checkbox
   useEffect(() => {
     if (isAdmin) {
-      setFormData((prevData) => ({ ...prevData, selectedSubjects: [] })); // Clear subjects if admin is selected
+      setFormData((prevData) => ({ ...prevData, selectedSubjects: [] }));
     }
   }, [isAdmin]);
 
@@ -98,31 +96,31 @@ const SignUp = () => {
 
   const handleSubmit = async (e) => {
     e.preventDefault();
-  
+
     if (isSignUp) {
       const { fullName, email, password, confirmPassword, selectedSubjects } = formData;
-  
+
       if (!fullName || !email || !password || !confirmPassword) {
         showToast("All fields are required!", "error");
         return;
       }
-  
+
       if (password !== confirmPassword) {
         showToast("Passwords do not match!", "error");
         return;
       }
-  
-      if (selectedSubjects.length < 5 && !isAdmin) {
-        showToast("Please select at least 5 subjects!", "error");
+
+      if (selectedSubjects.length === 0 && !isAdmin) {
+        showToast("Please select at least one subject!", "error");
         return;
       }
-  
+
       const subjectsString = selectedSubjects.map((subj) => subj.value).join(", ");
-  
+
       const registerUrl = isAdmin
         ? "http://localhost:5000/api/auth/admin/register"
         : "http://localhost:5000/api/auth/register";
-  
+
       try {
         const response = await fetch(registerUrl, {
           method: "POST",
@@ -134,15 +132,23 @@ const SignUp = () => {
             subjects: subjectsString,
           }),
         });
-  
+
         const data = await response.json();
-  
+
         if (!response.ok) {
-          throw new Error(data.message || "Registration failed!");
+          if (
+            data.message &&
+            /(already exists|email.*exists|user.*exists)/i.test(data.message)
+          ) {
+            showToast("User already exists. Please login or use another email.", "error");
+          } else {
+            showToast(data.message || "Registration failed!", "error");
+          }
+          return;
         }
-  
+
         showToast("Registration Successful!", "success");
-  
+
         setTimeout(() => {
           setIsSignUp(false);
           setFormData({
@@ -163,13 +169,13 @@ const SignUp = () => {
           headers: { "Content-Type": "application/json" },
           body: JSON.stringify({ email: formData.email, password: formData.password }),
         });
-  
+
         const data = await response.json();
-  
+
         if (!response.ok) {
           throw new Error(data.message || "Login failed!");
         }
-  
+
         sessionStorage.setItem("token", data.token);
         sessionStorage.setItem("role", data.role);
         sessionStorage.setItem("subjects", data.subjects);
@@ -177,7 +183,7 @@ const SignUp = () => {
         sessionStorage.setItem("email", data.email);
         sessionStorage.setItem("userId", data.userId);
         showToast("Login Successful!", "success");
-  
+
         setTimeout(() => {
           if (data.role === "Admin") {
             navigate("/Dashboard");
@@ -192,7 +198,7 @@ const SignUp = () => {
       }
     }
   };
-  
+
   return (
     <div className="signup-container">
       {toastMessage && <div className={`toast ${toastType}`}>{toastMessage}</div>}
@@ -229,7 +235,7 @@ const SignUp = () => {
                 Register as Admin
               </label>
               <label>Select Subjects:</label>
-              <Select   
+              <Select
                 options={scienceSubjects}
                 isMulti
                 value={formData.selectedSubjects}
